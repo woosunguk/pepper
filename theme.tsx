@@ -27,7 +27,7 @@ export default extendTheme({
     },
   },
   fontFamily: {
-    // display: "'Inter', var(--joy-fontFamily-fallback)",s
+    // display: "'Inter', var(--joy-fontFamily-fallback)",
     // body: "'Inter', var(--joy-fontFamily-fallback)",
   },
 });
