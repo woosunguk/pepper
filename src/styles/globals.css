@@ -1,8 +1,19 @@
-@import './preflight.css';
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@import './preflight.css';
+@import './lexical.css';
+
+body {
+    margin: 0;
+    background: #eee;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, ".SFNSText-Regular", sans-serif;
+    font-weight: 500;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
 
 #__next {
     position: absolute;

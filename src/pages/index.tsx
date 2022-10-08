@@ -1,8 +1,16 @@
 import { Fragment, useState } from 'react'
-import { Dialog, Popover, Tab, Transition } from '@headlessui/react'
+import { Dialog, Menu, Popover, Tab, Transition } from '@headlessui/react'
 import { Bars3Icon, MagnifyingGlassIcon, PlusIcon, ShoppingBagIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { Button } from '@mui/material'
 import FooterLayout from '@/layouts/FooterLayout'
+import Editor from '@/components/editor'
+
+const user = {
+  name: 'Lisa Marie',
+  email: 'lisamarie@example.com',
+  imageUrl:
+    'https://images.unsplash.com/photo-1517365830460-955ce3ccd263?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=80',
+}
 
 const navigation = {
   categories: [
@@ -127,6 +135,12 @@ const navigation = {
   ],
 }
 
+const userNavigation = [
+  { name: 'Your Profile', href: '#' },
+  { name: 'Settings', href: '#' },
+  { name: 'Sign out', href: '#' },
+]
+
 const navigation2 = {
   solutions: [
     { name: 'Marketing', href: '#' },
@@ -225,7 +239,7 @@ const Index = () => {
   const [open, setOpen] = useState(false)
 
   return (
-    <div className="flex flex-col h-full bg-white">
+    <div className="flex flex-col h-full">
       {/* Mobile menu */}
       <Transition.Root show={open} as={Fragment}>
         <Dialog as="div" className="relative z-40 lg:hidden" onClose={setOpen}>
@@ -367,9 +381,9 @@ const Index = () => {
       </Transition.Root>
 
       <header className="relative bg-white ">
-        <p className="flex items-center justify-center h-10 px-4 text-sm font-medium text-white bg-indigo-600 sm:px-6 lg:px-8">
+        {/* <p className="flex items-center justify-center h-10 px-4 text-sm font-medium text-white bg-indigo-600 sm:px-6 lg:px-8">
           Get free delivery on orders over $100
-        </p>
+        </p> */}
 
         <nav aria-label="Top" className="px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
           <div className="border-b border-gray-200">
@@ -496,7 +510,7 @@ const Index = () => {
               </Popover.Group>
 
               <div className="flex items-center ml-auto">
-                <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
+                {/* <div className="hidden lg:flex lg:flex-1 lg:items-center lg:justify-end lg:space-x-6">
                   <a href="#" className="text-sm font-medium text-gray-700 hover:text-gray-800">
                     Sign in
                   </a>
@@ -504,19 +518,7 @@ const Index = () => {
                   <a href="#" className="text-sm font-medium text-gray-700 hover:text-gray-800">
                     Create account
                   </a>
-                </div>
-
-                <div className="hidden lg:ml-8 lg:flex">
-                  <a href="#" className="flex items-center text-gray-700 hover:text-gray-800">
-                    <img
-                      src="https://tailwindui.com/img/flags/flag-canada.svg"
-                      alt=""
-                      className="flex-shrink-0 block w-5 h-auto"
-                    />
-                    <span className="block ml-3 text-sm font-medium">CAD</span>
-                    <span className="sr-only">, change currency</span>
-                  </a>
-                </div>
+                </div> */}
 
                 {/* Search */}
                 <div className="flex lg:ml-6">
@@ -526,9 +528,46 @@ const Index = () => {
                   </a>
                 </div>
 
+                {/* Profile dropdown */}
+                <Menu as="div" className="relative flex-shrink-0 ml-6">
+                  <div>
+                    <Menu.Button className="flex bg-white rounded-full focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2">
+                      <span className="sr-only">Open user menu</span>
+                      <img className="w-8 h-8 rounded-full" src={user.imageUrl} alt="" />
+                    </Menu.Button>
+                  </div>
+                  <Transition
+                    as={Fragment}
+                    enter="transition ease-out duration-100"
+                    enterFrom="transform opacity-0 scale-95"
+                    enterTo="transform opacity-100 scale-100"
+                    leave="transition ease-in duration-75"
+                    leaveFrom="transform opacity-100 scale-100"
+                    leaveTo="transform opacity-0 scale-95"
+                  >
+                    <Menu.Items className="absolute right-0 z-10 w-48 py-1 mt-2 origin-top-right bg-white rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                      {userNavigation.map((item) => (
+                        <Menu.Item key={item.name}>
+                          {({ active }) => (
+                            <a
+                              href={item.href}
+                              className={classNames(
+                                active ? 'bg-gray-100' : '',
+                                'block py-2 px-4 text-sm text-gray-700'
+                              )}
+                            >
+                              {item.name}
+                            </a>
+                          )}
+                        </Menu.Item>
+                      ))}
+                    </Menu.Items>
+                  </Transition>
+                </Menu>
+
                 {/* 글쓰기 */}
-                <Button className="" variant="contained" color="primary">
-                  <PlusIcon className="w-8 h-8 mr-1" />
+                <Button className="ml-6" variant="contained">
+                  <PlusIcon className="w-6 h-6 mr-1" />
                   <span>글쓰기</span>
                 </Button>
               </div>
@@ -537,10 +576,11 @@ const Index = () => {
         </nav>
       </header>
 
-      <div className="flex-1 px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
-        <Button color="primary">TEST</Button>
-        <h1 className="text-4xl font-bold py-14">요리 레시피 사이트</h1>
-        <p className="">사이드프로젝트 1</p>
+      <div className="flex-1 w-full px-4 mx-auto max-w-7xl sm:px-6 lg:px-8 lg:mb-32">
+        <h1 className="text-4xl font-bold py-14">Lexical Editor</h1>
+        <div className="max-w-6xl">
+          <Editor />
+        </div>
       </div>
     </div>
   )
