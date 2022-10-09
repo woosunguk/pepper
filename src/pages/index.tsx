@@ -2,6 +2,7 @@ import { Fragment, useState } from 'react'
 import { Dialog, Popover, Tab, Transition } from '@headlessui/react'
 import { Bars3Icon, MagnifyingGlassIcon, PlusIcon, ShoppingBagIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { Button } from '@mui/material'
+import FooterLayout from '@/layouts/FooterLayout'
 
 const navigation = {
   categories: [
@@ -220,7 +221,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function Example() {
+const Index = () => {
   const [open, setOpen] = useState(false)
 
   return (
@@ -541,93 +542,12 @@ export default function Example() {
         <h1 className="text-4xl font-bold py-14">요리 레시피 사이트</h1>
         <p className="">사이드프로젝트 1</p>
       </div>
-
-      <footer className="bg-white" aria-labelledby="footer-heading">
-        <h2 id="footer-heading" className="sr-only">
-          Footer
-        </h2>
-        <div className="px-4 py-12 mx-auto max-w-7xl sm:px-6 lg:py-16 lg:px-8">
-          <div className="xl:grid xl:grid-cols-3 xl:gap-8">
-            <div className="space-y-8 xl:col-span-1">
-              <img
-                className="h-10"
-                src="https://tailwindui.com/img/logos/mark.svg?color=gray&shade=300"
-                alt="Company name"
-              />
-              <p className="text-base text-gray-500">
-                Making the world a better place through constructing elegant hierarchies.
-              </p>
-              <div className="flex space-x-6">
-                {navigation2.social.map((item) => (
-                  <a key={item.name} href={item.href} className="text-gray-400 hover:text-gray-500">
-                    <span className="sr-only">{item.name}</span>
-                    <item.icon className="w-6 h-6" aria-hidden="true" />
-                  </a>
-                ))}
-              </div>
-            </div>
-            <div className="grid grid-cols-2 gap-8 mt-12 xl:col-span-2 xl:mt-0">
-              <div className="md:grid md:grid-cols-2 md:gap-8">
-                <div>
-                  <h3 className="text-base font-medium text-gray-900">Solutions</h3>
-                  <ul role="list" className="mt-4 space-y-4">
-                    {navigation2.solutions.map((item) => (
-                      <li key={item.name}>
-                        <a href={item.href} className="text-base text-gray-500 hover:text-gray-900">
-                          {item.name}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                <div className="mt-12 md:mt-0">
-                  <h3 className="text-base font-medium text-gray-900">Support</h3>
-                  <ul role="list" className="mt-4 space-y-4">
-                    {navigation2.support.map((item) => (
-                      <li key={item.name}>
-                        <a href={item.href} className="text-base text-gray-500 hover:text-gray-900">
-                          {item.name}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-              <div className="md:grid md:grid-cols-2 md:gap-8">
-                <div>
-                  <h3 className="text-base font-medium text-gray-900">Company</h3>
-                  <ul role="list" className="mt-4 space-y-4">
-                    {navigation2.company.map((item) => (
-                      <li key={item.name}>
-                        <a href={item.href} className="text-base text-gray-500 hover:text-gray-900">
-                          {item.name}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                <div className="mt-12 md:mt-0">
-                  <h3 className="text-base font-medium text-gray-900">Legal</h3>
-                  <ul role="list" className="mt-4 space-y-4">
-                    {navigation2.legal.map((item) => (
-                      <li key={item.name}>
-                        <a href={item.href} className="text-base text-gray-500 hover:text-gray-900">
-                          {item.name}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="pt-8 mt-12 border-t border-gray-200">
-            <p className="text-base text-gray-400 xl:text-center">
-              &copy; 2020 Your Company, Inc. All rights reserved.
-            </p>
-          </div>
-        </div>
-      </footer>
     </div>
   )
+}
+
+export default Index
+
+Index.layoutProps = {
+  Layout: FooterLayout,
 }
