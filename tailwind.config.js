@@ -5,11 +5,11 @@ module.exports = {
     "./src/layouts/**/*.{js,ts,jsx,tsx}",
     "./src/components/**/*.{js,ts,jsx,tsx}",
   ],
-  important: '#__next',
+  important: ['#__next', 'headlessui-portal-root'],
   theme: {
     extend: {},
   },
-  plugins: ['@tailwindcss/forms'],
+  plugins: ['@tailwindcss/forms', '@tailwindcss/aspect-ratio'],
   corePlugins: {
     preflight: false,
   }

@@ -21,7 +21,7 @@ export const Loading = () => {
 }
 
 const Layout = ({ children }: { children: React.ReactNode }) => {
-  return <main className="flex-1 h-full bg-white">{children}</main>
+  return <main className="flex-1 w-full h-full mx-auto bg-white max-w-7xl">{children}</main>
 }
 
 export default Layout
