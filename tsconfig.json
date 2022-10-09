@@ -17,13 +17,15 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve"
-  },
-  "paths": {
-    "@/assets/*": ["src/assets/*"],
-    "@/components/*": ["src/components/*"],
-    "@/pages/*": ["src/pages/*"],
-    "@/styles/*": ["src/styles/*"]
+    "jsx": "preserve",
+    "baseUrl": ".",
+    "paths": {
+      "@/assets/*": ["src/assets/*"],
+      "@/components/*": ["src/components/*"],
+      "@/pages/*": ["src/pages/*"],
+      "@/layouts/*": ["src/layouts/*"],
+      "@/styles/*": ["src/styles/*"]
+    },
   },
   "include": [
     "next-env.d.ts",
