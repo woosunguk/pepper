@@ -144,10 +144,10 @@ const Posts = () => {
       </div>
       <div className="fixed bottom-0 left-0 w-full bg-violet-700">
         <div className="flex items-center justify-end px-20 py-1 space-x-3">
-          <Button variant="contained" size="small" color="primary">
+          <Button variant="contained" color="primary" size="extra-small">
             업데이트
           </Button>
-          <Button variant="contained" size="small">
+          <Button variant="contained" size="extra-small">
             닫기
           </Button>
         </div>

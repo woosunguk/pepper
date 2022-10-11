@@ -9,7 +9,7 @@ module.exports = {
   theme: {
     extend: {},
   },
-  plugins: ['@tailwindcss/forms', '@tailwindcss/aspect-ratio'],
+  plugins: ['@tailwindcss/forms', '@tailwindcss/aspect-ratio', '@tailwindcss/line-clamp'],
   corePlugins: {
     preflight: false,
   }

@@ -5,10 +5,30 @@ import { createTheme, ThemeProvider } from '@mui/material'
 import { StyledEngineProvider } from '@mui/joy'
 
 import '../styles/globals.css'
+import { SessionProvider } from 'next-auth/react'
 
 const theme = createTheme({
-  components: {},
+  components: {
+    MuiButton: {
+      variants: [
+        {
+          props: { size: 'extra-small' },
+          style: {
+            height: 26,
+            paddingLeft: 8,
+            paddingRight: 8,
+          },
+        },
+      ],
+    },
+  },
 })
+
+declare module '@mui/material/Button' {
+  interface ButtonPropsSizeOverrides {
+    'extra-small': true
+  }
+}
 
 type NextPageWithLayout = NextPage & {
   layoutProps?: {
@@ -29,13 +49,16 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   return (
     <>
       <React.StrictMode>
-        <StyledEngineProvider injectFirst>
-          <ThemeProvider theme={theme}>
-            <Layout {...layoutProps}>
-              <Component {...pageProps} />
-            </Layout>
-          </ThemeProvider>
-        </StyledEngineProvider>
+        {/* @ts-ignore */}
+        <SessionProvider session={pageProps.session}>
+          <StyledEngineProvider injectFirst>
+            <ThemeProvider theme={theme}>
+              <Layout {...layoutProps}>
+                <Component {...pageProps} />
+              </Layout>
+            </ThemeProvider>
+          </StyledEngineProvider>
+        </SessionProvider>
       </React.StrictMode>
     </>
   )

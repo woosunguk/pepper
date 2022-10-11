@@ -4,6 +4,7 @@ import { Bars3Icon, MagnifyingGlassIcon, PlusIcon, ShoppingBagIcon, XMarkIcon } 
 import { Button } from '@mui/material'
 import FooterLayout from '@/layouts/FooterLayout'
 import Editor from '@/components/editor'
+import { signIn, signOut, useSession } from 'next-auth/react'
 
 const user = {
   name: 'Lisa Marie',
@@ -138,7 +139,6 @@ const navigation = {
 const userNavigation = [
   { name: 'Your Profile', href: '#' },
   { name: 'Settings', href: '#' },
-  { name: 'Sign out', href: '#' },
 ]
 
 const navigation2 = {
@@ -237,6 +237,10 @@ function classNames(...classes) {
 
 const Index = () => {
   const [open, setOpen] = useState(false)
+
+  const { data: session } = useSession()
+
+  console.debug(session)
 
   return (
     <div className="flex flex-col h-full">
@@ -521,21 +525,23 @@ const Index = () => {
                 </div> */}
 
                 {/* Search */}
-                <div className="flex lg:ml-6">
+                {/* <div className="flex lg:ml-6">
                   <a href="#" className="p-2 text-gray-400 hover:text-gray-500">
                     <span className="sr-only">Search</span>
                     <MagnifyingGlassIcon className="w-6 h-6" aria-hidden="true" />
                   </a>
-                </div>
+                </div> */}
 
                 {/* Profile dropdown */}
                 <Menu as="div" className="relative flex-shrink-0 ml-6">
-                  <div>
-                    <Menu.Button className="flex bg-white rounded-full focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2">
-                      <span className="sr-only">Open user menu</span>
-                      <img className="w-8 h-8 rounded-full" src={user.imageUrl} alt="" />
-                    </Menu.Button>
-                  </div>
+                  <Menu.Button className="flex bg-white rounded-full focus:outline-none focus:ring-2 focus:ring-gray-900 focus:ring-offset-2">
+                    <span className="sr-only">Open user menu</span>
+                    <img className="w-8 h-8 mr-2 rounded-full" src={session?.user.image} alt="" />
+                    <div className="mr-2 text-xs text-left">
+                      <p className="font-semibold">{session?.user.name}</p>
+                      <p>{session?.user.email}</p>
+                    </div>
+                  </Menu.Button>
                   <Transition
                     as={Fragment}
                     enter="transition ease-out duration-100"
@@ -561,14 +567,29 @@ const Index = () => {
                           )}
                         </Menu.Item>
                       ))}
+                      <Menu.Item key={'signout'}>
+                        {({ active }) => (
+                          <p
+                            onClick={() => signOut()}
+                            className={classNames(
+                              active ? 'bg-gray-100' : '',
+                              'block py-2 px-4 text-sm text-gray-700 cursor-pointer'
+                            )}
+                          >
+                            Sign out
+                          </p>
+                        )}
+                      </Menu.Item>
                     </Menu.Items>
                   </Transition>
                 </Menu>
 
+                {session ? <></> : <div onClick={() => signIn()}>Sign in</div>}
+
                 {/* 글쓰기 */}
                 <Button className="ml-6" variant="contained">
-                  <PlusIcon className="w-6 h-6 mr-1" />
-                  <span>글쓰기</span>
+                  <PlusIcon className="w-4 h-4 mr-1" />
+                  <span className="text-sm">글쓰기</span>
                 </Button>
               </div>
             </div>

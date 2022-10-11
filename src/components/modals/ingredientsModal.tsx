@@ -179,7 +179,7 @@ const IngredientsModal = ({ open, handleClose }) => {
                       </Combobox.Options>
                     )}
 
-                    {
+                    {query !== '' && filteredPeople.length === 0 && (
                       <div className="px-6 text-sm text-center py-14 sm:px-14">
                         <UsersIcon className="w-6 h-6 mx-auto text-gray-400" aria-hidden="true" />
                         <p className="mt-4 font-semibold text-gray-900">식재료가 없습니다.</p>
@@ -188,7 +188,7 @@ const IngredientsModal = ({ open, handleClose }) => {
                         </p>
                         <Button className="mt-4">재료 등록하기</Button>
                       </div>
-                    }
+                    )}
                   </>
                 )}
               </Combobox>
