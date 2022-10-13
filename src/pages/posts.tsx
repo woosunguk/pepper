@@ -5,10 +5,37 @@ import { Avatar, Button, IconButton, TextField } from '@mui/material'
 
 import IngredientsModal from '@/components/modals/ingredientsModal'
 import { PlusIcon } from '@heroicons/react/24/outline'
+import axios from 'axios'
+import clientPromise from 'src/lib/mongodb'
+import { InferGetServerSidePropsType } from 'next'
 
 const Editor = dynamic(() => import('@/components/editor'), { ssr: false })
 
-const Posts = () => {
+export async function getServerSideProps(context) {
+  try {
+    const client = await clientPromise
+
+    const db = client.db('pepper')
+    const recipes = db.collection('recipes')
+
+    const test = await recipes.find({ id: 'replace_with_new_document_id' })
+
+    console.debug('DATA:', await test.toArray())
+    console.debug('COUNT:', await test.count())
+
+    return {
+      props: { isConnected: true },
+    }
+  } catch (e) {
+    console.error(e)
+    return {
+      props: { isConnected: false },
+    }
+  }
+}
+
+const Posts = ({ isConnected }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
+  console.debug('isConnected', isConnected)
   const ingredients = [
     {
       title: '카레가루',
@@ -144,7 +171,14 @@ const Posts = () => {
       </div>
       <div className="fixed bottom-0 left-0 w-full bg-violet-700">
         <div className="flex items-center justify-end px-20 py-1 space-x-3">
-          <Button variant="contained" color="primary" size="extra-small">
+          <Button
+            variant="contained"
+            color="primary"
+            size="extra-small"
+            onClick={() => {
+              axios.post('/api/test')
+            }}
+          >
             업데이트
           </Button>
           <Button variant="contained" size="extra-small">
