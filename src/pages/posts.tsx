@@ -8,6 +8,8 @@ import { PlusIcon } from '@heroicons/react/24/outline'
 import axios from 'axios'
 import clientPromise from 'src/lib/mongodb'
 import { InferGetServerSidePropsType } from 'next'
+import RegistIngredientsModal from '@/components/modals/registIngredientsModal'
+import { BlobServiceClient } from '@azure/storage-blob'
 
 const Editor = dynamic(() => import('@/components/editor'), { ssr: false })
 
@@ -22,6 +24,23 @@ export async function getServerSideProps(context) {
 
     console.debug('DATA:', await test.toArray())
     console.debug('COUNT:', await test.count())
+    console.debug(process.env.AZURE_STORAGE_CONNECTION_STRING)
+
+    console.debug('\nListing blobs...')
+
+    const blobServiceClient = BlobServiceClient.fromConnectionString(process.env.AZURE_STORAGE_CONNECTION_STRING)
+    const containerClient = blobServiceClient.getContainerClient('images')
+
+    // List the blob(s) in the container.
+    for await (const blob of containerClient.listBlobsFlat()) {
+      // Get Blob Client from name, to get the URL
+      const tempBlockBlobClient = containerClient.getBlockBlobClient(blob.name)
+
+      // Display blob name and URL
+      console.debug(`\n\tname: ${blob.name}\n\tURL: ${tempBlockBlobClient.url}\n`)
+    }
+
+    console.debug('---------------')
 
     return {
       props: { isConnected: true },
@@ -123,6 +142,7 @@ const Posts = ({ isConnected }: InferGetServerSidePropsType<typeof getServerSide
 
   return (
     <>
+      <RegistIngredientsModal></RegistIngredientsModal>
       <div className="">
         <div className="bg-gray-200/30">
           <TextField
@@ -176,7 +196,7 @@ const Posts = ({ isConnected }: InferGetServerSidePropsType<typeof getServerSide
             color="primary"
             size="extra-small"
             onClick={() => {
-              axios.post('/api/test')
+              axios.post('/api/upload')
             }}
           >
             업데이트

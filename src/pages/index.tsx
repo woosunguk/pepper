@@ -1,10 +1,18 @@
 import { Fragment, useState } from 'react'
-import { Dialog, Menu, Popover, Tab, Transition } from '@headlessui/react'
+import { Dialog, Listbox, Menu, Popover, Tab, Transition } from '@headlessui/react'
 import { Bars3Icon, MagnifyingGlassIcon, PlusIcon, ShoppingBagIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { Button } from '@mui/material'
 import FooterLayout from '@/layouts/FooterLayout'
 import Editor from '@/components/editor'
 import { signIn, signOut, useSession } from 'next-auth/react'
+
+const people = [
+  { id: 1, name: 'Durward Reynolds' },
+  { id: 2, name: 'Kenton Towne' },
+  { id: 3, name: 'Therese Wunsch' },
+  { id: 4, name: 'Benedict Kessler' },
+  { id: 5, name: 'Katelyn Rohan' },
+]
 
 const user = {
   name: 'Lisa Marie',
@@ -239,6 +247,8 @@ const Index = () => {
   const [open, setOpen] = useState(false)
 
   const { data: session } = useSession()
+
+  const [selectedPeople, setSelectedPeople] = useState([people[0], people[1]])
 
   console.debug(session)
 
@@ -603,6 +613,17 @@ const Index = () => {
           <Editor />
         </div>
       </div>
+
+      <Listbox value={selectedPeople} onChange={setSelectedPeople} multiple>
+        <Listbox.Button>{selectedPeople.map((person) => person.name).join(', ')}</Listbox.Button>
+        <Listbox.Options>
+          {people.map((person) => (
+            <Listbox.Option key={person.id} value={person}>
+              {person.name}
+            </Listbox.Option>
+          ))}
+        </Listbox.Options>
+      </Listbox>
     </div>
   )
 }
