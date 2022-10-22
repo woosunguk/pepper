@@ -184,9 +184,8 @@ const RegistIngredientsModal = () => {
                             formData.append('name', '카레')
                             formData.append('_method', 'PUT')
 
-                            // 배포시에는 지워줘야 합니다.
                             axios
-                              .post(`/api/test`, formData, {
+                              .post(`/api/upload`, formData, {
                                 headers: {
                                   'Content-Type': 'multipart/form-data',
                                 },
