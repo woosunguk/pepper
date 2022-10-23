@@ -8,6 +8,7 @@ import {
   FormControlLabel,
   FormLabel,
   IconButton,
+  Pagination,
   Radio,
   RadioGroup,
   RadioProps,
@@ -18,7 +19,7 @@ import { styled } from '@mui/system'
 import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
 import clsx from 'clsx'
-import React, { Suspense, useDeferredValue, useMemo, useState } from 'react'
+import React, { Suspense, useDeferredValue, useEffect, useMemo, useState } from 'react'
 
 const BpIcon = styled('span')(({ theme }) => ({
   borderRadius: '50%',
@@ -242,19 +243,50 @@ const fetchIngredients = async (filters) => {
 const SearchIngredients = ({ query }) => {
   console.debug('query', query)
 
-  const ingredientsQuery = useQuery(['ingredients', query], () => fetchIngredients(query))
+  const [page, setPage] = useState(0)
+  const [total, setTotal] = useState(0)
+  const [ingredients, setIngredients] = useState([])
+
+  const ingredientsQuery = useQuery(['ingredients', query, page], () => fetchIngredients({ ...query, page }), {
+    onSuccess: ({ data, total }) => {
+      setIngredients(data)
+      setTotal(total)
+    },
+    enabled: false,
+  })
+
+  useEffect(() => {
+    setPage(0)
+    ingredientsQuery.refetch()
+  }, [query])
+
+  useEffect(() => {
+    ingredientsQuery.refetch()
+  }, [page])
 
   if (ingredientsQuery.isLoading) {
     return <p>Loading...</p>
   }
 
-  if (ingredientsQuery?.data.length == 0) {
+  if (ingredients.length == 0) {
     return <p>검색 결과가 없습니다.</p>
   }
 
   return (
     <>
-      {ingredientsQuery?.data.map((item) => (
+      <div className="flex justify-end mb-4">
+        <Pagination
+          size="small"
+          count={Math.ceil(total / query.per_page)}
+          page={page + 1}
+          onChange={(event, value) => {
+            setPage(value - 1)
+          }}
+          showFirstButton
+          showLastButton
+        />
+      </div>
+      {ingredients.map((item) => (
         <div key={item._id} className="flex justify-between py-2">
           <div className="flex items-start space-x-4">
             <img
@@ -307,11 +339,10 @@ const SearchIngredients = ({ query }) => {
 const Ingredients = () => {
   const [filters, setFilters] = useState({
     keyword: '',
+    per_page: 10,
   })
   // const [isPending, startTransition] = useTransition()
   const deferredQuery = useDeferredValue(filters)
-
-  const ingredientsQuery = useQuery(['ingredients'], () => fetchIngredients(filters))
 
   const onChangeKeyword = (event) => {
     const { value } = event.target
@@ -435,7 +466,8 @@ const Ingredients = () => {
         <div className="relative z-0 flex flex-1 overflow-hidden">
           <main className="relative z-0 flex-1 px-4 py-6 overflow-y-auto focus:outline-none xl:order-last sm:px-6 lg:px-8">
             {/* Start main area*/}
-            <h1 className="text-4xl font-bold pb-14">검색 결과</h1>
+            <h1 className="text-4xl font-bold">검색 결과</h1>
+
             <div className="divide-y">
               <>
                 <Suspense fallback="Loading results...">{searchResult}</Suspense>
@@ -448,23 +480,50 @@ const Ingredients = () => {
             <div className="absolute inset-0 px-4 py-6 sm:px-6 lg:px-8">
               <div className="flex items-center justify-between mb-10">
                 <p className="font-bold">FILTER BY</p>
-                <p className="text-blue-700">Clear Filter</p>
+                <p
+                  className="text-blue-700 cursor-pointer"
+                  onClick={() => {
+                    setFilters({
+                      keyword: '',
+                      per_page: 10,
+                    })
+                  }}
+                >
+                  Clear Filter
+                </p>
               </div>
 
               <div className="flex flex-col space-y-8">
                 <div className="flex flex-col">
                   <FormControl>
                     <FormLabel className="mb-2">검색어</FormLabel>
-                    <TextField size="small" onChange={onChangeKeyword} />
+                    <TextField size="small" value={filters.keyword} onChange={onChangeKeyword} />
                   </FormControl>
                 </div>
                 <div className="flex flex-col">
-                  <FormLabel>검색어</FormLabel>
-                  <Slider size="small" defaultValue={70} aria-label="Small" valueLabelDisplay="auto" />
+                  <FormLabel>
+                    <div className="flex items-center justify-between">
+                      <p>검색 수</p>
+                      <p className="text-xs text-gray-400">{filters.per_page}</p>
+                    </div>
+                  </FormLabel>
+                  <Slider
+                    size="small"
+                    min={1}
+                    max={50}
+                    value={filters.per_page}
+                    defaultValue={filters.per_page}
+                    aria-label="Small"
+                    valueLabelDisplay="auto"
+                    onChangeCommitted={(event, value) => {
+                      console.debug(event, value)
+                      setFilters({ ...filters, per_page: value })
+                    }}
+                  />
                 </div>
-                <div>
+                {/* <div>
                   <FormControl>
-                    <FormLabel id="demo-customized-radios">종류</FormLabel>
+                    <FormLabel id="demo-customized-radios">카테고리</FormLabel>
                     <RadioGroup defaultValue="female" aria-labelledby="demo-customized-radios" name="customized-radios">
                       <FormControlLabel value="female" control={<BpRadio />} label="야채" />
                       <FormControlLabel value="male" control={<BpRadio />} label="고기" />
@@ -484,7 +543,7 @@ const Ingredients = () => {
                     defaultValue={[top100Films()[13]]}
                     renderInput={(params) => <TextField {...params} />}
                   />
-                </div>
+                </div> */}
               </div>
             </div>
             {/* End secondary column */}

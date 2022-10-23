@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import clientPromise from 'src/lib/mongodb'
 
 export default async function handler(_req: NextApiRequest, res: NextApiResponse) {
-  //   console.debug(_req.query)
+  console.debug(_req.query)
   const query = _req.query
 
   // Get data from your database
@@ -11,7 +11,13 @@ export default async function handler(_req: NextApiRequest, res: NextApiResponse
   const db = client.db('pepper')
   const recipes = db.collection('ingredients')
 
-  const result = await recipes.find({ name: { $regex: query.keyword, $options: 'i' } }).toArray()
+  const curosr = await recipes.find({ name: { $regex: query.keyword, $options: 'i' } })
 
-  res.status(200).json(result)
+  res.status(200).json({
+    total: await curosr.count(),
+    data: await curosr
+      .skip(query.page * query.per_page)
+      .limit(parseInt(query.per_page))
+      .toArray(),
+  })
 }
