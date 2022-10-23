@@ -1,10 +1,8 @@
 import FooterLayout from '@/layouts/FooterLayout'
-import { BlobServiceClient } from '@azure/storage-blob'
 import { Disclosure } from '@headlessui/react'
-import { CalendarIcon, FolderIcon, HomeIcon, PencilIcon, TrashIcon, UsersIcon } from '@heroicons/react/24/outline'
+import { FolderIcon, HomeIcon, PencilIcon, TrashIcon, UsersIcon } from '@heroicons/react/24/outline'
 import {
   Autocomplete,
-  Button,
   Chip,
   FormControl,
   FormControlLabel,
@@ -17,31 +15,10 @@ import {
   TextField,
 } from '@mui/material'
 import { styled } from '@mui/system'
+import { useQuery } from '@tanstack/react-query'
+import axios from 'axios'
 import clsx from 'clsx'
-import React from 'react'
-import clientPromise from 'src/lib/mongodb'
-
-export async function getServerSideProps(context) {
-  try {
-    const client = await clientPromise
-
-    const db = client.db('pepper')
-    const recipes = db.collection('ingredients')
-
-    const result = await recipes.find().toArray()
-
-    console.debug(result)
-
-    return {
-      props: { ingredients: JSON.parse(JSON.stringify(result)) },
-    }
-  } catch (e) {
-    console.error(e)
-    return {
-      props: { isConnected: false },
-    }
-  }
-}
+import React, { Suspense, useDeferredValue, useMemo, useState } from 'react'
 
 const BpIcon = styled('span')(({ theme }) => ({
   borderRadius: '50%',
@@ -254,8 +231,98 @@ const top100Films = () => [
   { title: 'Monty Python and the Holy Grail', year: 1975 },
 ]
 
-const Ingredients = ({ ingredients }: { ingredients: any[] }) => {
-  console.debug(ingredients)
+const fetchIngredients = async (filters) => {
+  const { data } = await axios.get(`/api/ingredients`, {
+    params: filters,
+  })
+
+  return data
+}
+
+const SearchIngredients = ({ query }) => {
+  console.debug('query', query)
+
+  const ingredientsQuery = useQuery(['ingredients', query], () => fetchIngredients(query))
+
+  if (ingredientsQuery.isLoading) {
+    return <p>Loading...</p>
+  }
+
+  if (ingredientsQuery?.data.length == 0) {
+    return <p>검색 결과가 없습니다.</p>
+  }
+
+  return (
+    <>
+      {ingredientsQuery?.data.map((item) => (
+        <div key={item._id} className="flex justify-between py-2">
+          <div className="flex items-start space-x-4">
+            <img
+              className="w-12 h-12 rounded-full"
+              src={`https://cs110037ffe9463dc59.blob.core.windows.net/images/ingredients/${item._id}`}
+            ></img>
+            <div className="flex flex-col">
+              <p>{item.name}</p>
+              <div className="space-x-2 text-sm text-gray-500">
+                <p>
+                  {item.name}
+                  {item.name}
+                  {item.name}
+                  {item.name}
+                  {item.name}
+                  {item.name}
+                  {item.name}
+                  {item.name}
+                  {item.name}
+                  {item.name}
+                  {item.name}
+                  {item.name}
+                  {item.name}
+                </p>
+              </div>
+            </div>
+          </div>
+          <div className="flex items-center space-x-16">
+            <div className="flex space-x-2">
+              <Chip label={'# TAG A'} size="small" />
+              <Chip label={'# TAG BBB'} size="small" />
+              <Chip label={'# TAG CC'} size="small" />
+              <Chip label={'# TAG DDDDDDD'} size="small" />
+            </div>
+            <div>
+              <IconButton>
+                <PencilIcon className="w-4 h-4" />
+              </IconButton>
+              <IconButton>
+                <TrashIcon className="w-4 h-4 text-red-500" />
+              </IconButton>
+            </div>
+          </div>
+        </div>
+      ))}
+    </>
+  )
+}
+
+const Ingredients = () => {
+  const [filters, setFilters] = useState({
+    keyword: '',
+  })
+  // const [isPending, startTransition] = useTransition()
+  const deferredQuery = useDeferredValue(filters)
+
+  const ingredientsQuery = useQuery(['ingredients'], () => fetchIngredients(filters))
+
+  const onChangeKeyword = (event) => {
+    const { value } = event.target
+
+    setFilters({ ...filters, keyword: value })
+    // startTransition(() => {
+    //   setFilters({ ...filters, keyword: value })
+    // })
+  }
+
+  const searchResult = useMemo(() => <SearchIngredients query={deferredQuery} />, [deferredQuery])
 
   return (
     <div className="flex flex-1 h-full">
@@ -370,52 +437,9 @@ const Ingredients = ({ ingredients }: { ingredients: any[] }) => {
             {/* Start main area*/}
             <h1 className="text-4xl font-bold pb-14">검색 결과</h1>
             <div className="divide-y">
-              {ingredients.map((item) => (
-                <div key={item._id} className="flex justify-between py-2">
-                  <div className="flex items-start space-x-4">
-                    <img
-                      className="w-12 h-12 rounded-full"
-                      src={`https://cs110037ffe9463dc59.blob.core.windows.net/images/ingredients/${item._id}`}
-                    ></img>
-                    <div className="flex flex-col">
-                      <p>{item.name}</p>
-                      <p className="space-x-2 text-sm text-gray-500">
-                        <p>
-                          {item.name}
-                          {item.name}
-                          {item.name}
-                          {item.name}
-                          {item.name}
-                          {item.name}
-                          {item.name}
-                          {item.name}
-                          {item.name}
-                          {item.name}
-                          {item.name}
-                          {item.name}
-                          {item.name}
-                        </p>
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-center space-x-16">
-                    <div className="flex space-x-2">
-                      <Chip label={'# TAG A'} size="small" />
-                      <Chip label={'# TAG BBB'} size="small" />
-                      <Chip label={'# TAG CC'} size="small" />
-                      <Chip label={'# TAG DDDDDDD'} size="small" />
-                    </div>
-                    <div>
-                      <IconButton>
-                        <PencilIcon className="w-4 h-4" />
-                      </IconButton>
-                      <IconButton>
-                        <TrashIcon className="w-4 h-4 text-red-500" />
-                      </IconButton>
-                    </div>
-                  </div>
-                </div>
-              ))}
+              <>
+                <Suspense fallback="Loading results...">{searchResult}</Suspense>
+              </>
             </div>
             {/* End main area */}
           </main>
@@ -431,7 +455,7 @@ const Ingredients = ({ ingredients }: { ingredients: any[] }) => {
                 <div className="flex flex-col">
                   <FormControl>
                     <FormLabel className="mb-2">검색어</FormLabel>
-                    <TextField size="small" />
+                    <TextField size="small" onChange={onChangeKeyword} />
                   </FormControl>
                 </div>
                 <div className="flex flex-col">

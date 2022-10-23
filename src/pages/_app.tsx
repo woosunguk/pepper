@@ -6,6 +6,8 @@ import { StyledEngineProvider } from '@mui/joy'
 
 import '../styles/globals.css'
 import { SessionProvider } from 'next-auth/react'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 const theme = createTheme({
   components: {
@@ -41,6 +43,16 @@ type AppPropsWithLayout = AppProps & {
   Component: NextPageWithLayout
 }
 
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchInterval: false,
+      refetchOnWindowFocus: false,
+      // suspense: true,
+    },
+  },
+})
+
 export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   // Use the layout defined at the page level, if available
   const Layout = Component.layoutProps?.Layout || React.Fragment
@@ -49,16 +61,19 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
   return (
     <>
       <React.StrictMode>
-        {/* @ts-ignore */}
-        <SessionProvider session={pageProps.session}>
-          <StyledEngineProvider injectFirst>
-            <ThemeProvider theme={theme}>
-              <Layout {...layoutProps}>
-                <Component {...pageProps} />
-              </Layout>
-            </ThemeProvider>
-          </StyledEngineProvider>
-        </SessionProvider>
+        <QueryClientProvider client={queryClient}>
+          <ReactQueryDevtools initialIsOpen={false} />
+          {/* @ts-ignore */}
+          <SessionProvider session={pageProps.session}>
+            <StyledEngineProvider injectFirst>
+              <ThemeProvider theme={theme}>
+                <Layout {...layoutProps}>
+                  <Component {...pageProps} />
+                </Layout>
+              </ThemeProvider>
+            </StyledEngineProvider>
+          </SessionProvider>
+        </QueryClientProvider>
       </React.StrictMode>
     </>
   )
