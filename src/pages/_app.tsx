@@ -1,30 +1,13 @@
 import * as React from 'react'
 import { NextPage } from 'next'
 import { AppProps } from 'next/app'
-import { createTheme, ThemeProvider } from '@mui/material'
 import { StyledEngineProvider } from '@mui/joy'
 
 import '../styles/globals.css'
 import { SessionProvider } from 'next-auth/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-
-const theme = createTheme({
-  components: {
-    MuiButton: {
-      variants: [
-        {
-          props: { size: 'extra-small' },
-          style: {
-            height: 26,
-            paddingLeft: 8,
-            paddingRight: 8,
-          },
-        },
-      ],
-    },
-  },
-})
+import { ManagedUIContext } from '@/components/ui/context'
 
 declare module '@mui/material/Button' {
   interface ButtonPropsSizeOverrides {
@@ -66,11 +49,12 @@ export default function MyApp({ Component, pageProps }: AppPropsWithLayout) {
           {/* @ts-ignore */}
           <SessionProvider session={pageProps.session}>
             <StyledEngineProvider injectFirst>
-              <ThemeProvider theme={theme}>
+              {/* @ts-ignore */}
+              <ManagedUIContext>
                 <Layout {...layoutProps}>
                   <Component {...pageProps} />
                 </Layout>
-              </ThemeProvider>
+              </ManagedUIContext>
             </StyledEngineProvider>
           </SessionProvider>
         </QueryClientProvider>
