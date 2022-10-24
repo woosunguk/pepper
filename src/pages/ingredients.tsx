@@ -1,3 +1,4 @@
+import { useUI } from '@/components/ui'
 import FooterLayout from '@/layouts/FooterLayout'
 import { Disclosure } from '@headlessui/react'
 import { FolderIcon, HomeIcon, PencilIcon, TrashIcon, UsersIcon } from '@heroicons/react/24/outline'
@@ -241,7 +242,7 @@ const fetchIngredients = async (filters) => {
 }
 
 const SearchIngredients = ({ query }) => {
-  console.debug('query', query)
+  const { openAlert, openConfirm, openModal, enqueueModal, openSidebar } = useUI()
 
   const [page, setPage] = useState(0)
   const [total, setTotal] = useState(0)
@@ -254,6 +255,49 @@ const SearchIngredients = ({ query }) => {
     },
     enabled: false,
   })
+
+  const handleDelete = (event, item) => {
+    console.debug(event, item)
+
+    openConfirm('삭제하시겠습니까?', {
+      description: (
+        <>
+          <div className="flex items-start space-x-4">
+            <img
+              className="w-12 h-12 rounded-full"
+              src={`https://cs110037ffe9463dc59.blob.core.windows.net/images/ingredients/${item._id}`}
+            ></img>
+            <div className="flex flex-col">
+              <p>{item.name}</p>
+              <div className="space-x-2 text-sm text-gray-500">
+                <p>
+                  {item.name}
+                  {item.name}
+                  {item.name}
+                  {item.name}
+                  {item.name}
+                  {item.name}
+                  {item.name}
+                  {item.name}
+                  {item.name}
+                  {item.name}
+                  {item.name}
+                  {item.name}
+                  {item.name}
+                </p>
+              </div>
+            </div>
+          </div>
+        </>
+      ),
+      size: '5xl',
+      onSubmit: async () => {
+        await axios.delete(`/api/ingredients/${item._id}`)
+        ingredientsQuery.refetch()
+        alert('삭제되었습니다.')
+      },
+    })
+  }
 
   useEffect(() => {
     setPage(0)
@@ -325,7 +369,7 @@ const SearchIngredients = ({ query }) => {
               <IconButton>
                 <PencilIcon className="w-4 h-4" />
               </IconButton>
-              <IconButton>
+              <IconButton onClick={(event) => handleDelete(event, item)}>
                 <TrashIcon className="w-4 h-4 text-red-500" />
               </IconButton>
             </div>
