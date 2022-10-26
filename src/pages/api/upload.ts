@@ -45,3 +45,9 @@ export default async function _(req, res) {
 
   return res.status(200).json(uploadBlobResponse)
 }
+
+export const config = {
+  api: {
+    bodyParser: false,
+  },
+}

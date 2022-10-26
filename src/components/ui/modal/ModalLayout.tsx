@@ -22,76 +22,65 @@ const ModalLayout = () => {
 
   return (
     <>
-      <Dialog
-        as="div"
-        className="relative z-40"
-        open={componentModal.length > 0}
-        onClose={() => {}}
-        onClick={(e: any) => {
-          if ((e.target as HTMLElement).classList.contains('dialog-overlay')) {
-            if (currentModal?.options?.closeConfirm) {
-              setCloseConfirm(true)
-            } else {
-              closeModal()
+      <Transition.Root show={componentModal.length > 0} as={Fragment}>
+        <Dialog
+          as="div"
+          className="relative z-10"
+          onClose={(e) => {}}
+          onClick={(e: any) => {
+            if ((e.target as HTMLElement).classList.contains('test')) {
+              if (currentModal?.options?.closeConfirm) {
+                setCloseConfirm(true)
+              } else {
+                closeModal()
+              }
             }
-          }
-        }}
-      >
-        <Dialog.Overlay
-          className="fixed inset-0 bg-gray-500 opacity-25"
-          onClick={() => {
-            console.debug('1111111')
           }}
-        />
-
-        <div className="fixed inset-0 overflow-y-auto z-5 ">
-          <div
-            className={clsx('flex w-full min-h-screen p-4 text-center dialog-overlay min-w-max', {
-              'items-center justify-center':
-                currentModal?.options?.position == null || currentModal?.options?.position == 'center',
-              'items-start justify-center': currentModal?.options?.position == 'top',
-              'items-end justify-center': currentModal?.options?.position == 'bottom',
-              'items-center justify-end': currentModal?.options?.position == 'right',
-              'items-center justify-start': currentModal?.options?.position == 'left',
-              'items-start justify-end': currentModal?.options?.position == 'top-right',
-              'items-start justify-start': currentModal?.options?.position == 'top-left',
-              'items-end justify-end': currentModal?.options?.position == 'bottom-right',
-              'items-end justify-start': currentModal?.options?.position == 'bottom-left',
-            })}
+        >
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
           >
-            {/* This element is to trick the browser into centering the modal contents. */}
-            {/* <span className="hidden w-2/4 sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">
-            &#8203;
-          </span> */}
+            <div className="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75" />
+          </Transition.Child>
 
-            <div
-              className={clsx(
-                {
-                  'min-w-fit': currentModal?.options?.size == null,
-                  'w-128': currentModal?.options?.size == 'xl',
-                  'w-256': currentModal?.options?.size == '5xl',
-                },
-                'relative dialog'
-              )}
-            >
-              {currentModal?.content}
-              <div className="p-2 text-white bg-gray-700">
-                <p className="text-xs">aaaaaaaaaaaaaaaaaaa</p>
-              </div>
+          <div className="fixed inset-0 z-10 overflow-y-auto">
+            <div className="flex items-end justify-center min-h-full p-4 text-center test sm:items-center sm:p-0">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                enterTo="opacity-100 translate-y-0 sm:scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 translate-y-0 sm:scale-100"
+                leaveTo="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+              >
+                <Dialog.Panel className="relative w-full max-w-3xl overflow-hidden text-left transition-all transform">
+                  {currentModal?.content}
 
-              {/* {componentModal.map((modal) => modal)} */}
+                  <div className="p-2 text-xs text-white bg-gray-700">
+                    <p>Dialog option</p>
+                    <p>{JSON.stringify(currentModal?.options)}</p>
+                  </div>
+
+                  {/* {componentModal.map((modal) => (
+                    <>
+                      <p>{modal.key ?? '-'}</p>
+                    </>
+                  ))} */}
+
+                  {/* {componentModal.map((modal) => modal)} */}
+                </Dialog.Panel>
+              </Transition.Child>
             </div>
           </div>
-        </div>
-
-        <div className="fixed bottom-0 flex space-x-2">
-          {componentModal.map((modal) => (
-            <>
-              <p>{modal.key ?? '-'}</p>
-            </>
-          ))}
-        </div>
-      </Dialog>
+        </Dialog>
+      </Transition.Root>
 
       <Transition.Root show={displayCloseConfirm} as={Fragment}>
         <Dialog as="div" className="relative z-50" onClose={setCloseConfirm}>

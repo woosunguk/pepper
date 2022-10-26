@@ -1,9 +1,11 @@
+import RegistIngredientsModal from '@/components/modals/registIngredientsModal'
 import { useUI } from '@/components/ui'
 import FooterLayout from '@/layouts/FooterLayout'
 import { Disclosure } from '@headlessui/react'
 import { FolderIcon, HomeIcon, PencilIcon, TrashIcon, UsersIcon } from '@heroicons/react/24/outline'
 import {
   Autocomplete,
+  Button,
   Chip,
   FormControl,
   FormControlLabel,
@@ -318,6 +320,10 @@ const SearchIngredients = ({ query }) => {
 
   return (
     <>
+      <div className="border border-red-500">
+        <RegistIngredientsModal />
+      </div>
+
       <div className="flex justify-end mb-4">
         <Pagination
           size="small"
@@ -381,6 +387,8 @@ const SearchIngredients = ({ query }) => {
 }
 
 const Ingredients = () => {
+  const { openAlert, openConfirm, openModal, enqueueModal, openSidebar } = useUI()
+
   const [filters, setFilters] = useState({
     keyword: '',
     per_page: 10,
@@ -510,7 +518,21 @@ const Ingredients = () => {
         <div className="relative z-0 flex flex-1 overflow-hidden">
           <main className="relative z-0 flex-1 px-4 py-6 overflow-y-auto focus:outline-none xl:order-last sm:px-6 lg:px-8">
             {/* Start main area*/}
-            <h1 className="text-4xl font-bold">검색 결과</h1>
+            <div className="flex justify-between mb-8">
+              <h1 className="text-4xl font-bold">검색 결과</h1>
+
+              <Button
+                color="secondary"
+                onClick={() => {
+                  openModal(<RegistIngredientsModal />, {
+                    size: '3xl',
+                    variant: '',
+                  })
+                }}
+              >
+                추가하기
+              </Button>
+            </div>
 
             <div className="divide-y">
               <>
