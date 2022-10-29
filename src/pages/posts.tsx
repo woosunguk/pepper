@@ -53,8 +53,7 @@ export async function getServerSideProps(context) {
   }
 }
 
-const Posts = ({ isConnected }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  console.debug('isConnected', isConnected)
+const Posts = () => {
   const ingredients = [
     {
       title: '카레가루',
@@ -142,7 +141,6 @@ const Posts = ({ isConnected }: InferGetServerSidePropsType<typeof getServerSide
 
   return (
     <>
-      <RegistIngredientsModal></RegistIngredientsModal>
       <div className="">
         <div className="bg-gray-200/30">
           <TextField

@@ -3,6 +3,8 @@ import { Combobox, Dialog, RadioGroup, Transition } from '@headlessui/react'
 import { ChevronRightIcon, MagnifyingGlassIcon, StarIcon, UsersIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import clsx from 'clsx'
 import { Button, FormControl, InputLabel, MenuItem, Select, SelectChangeEvent, TextField } from '@mui/material'
+import { useQuery } from '@tanstack/react-query'
+import axios from 'axios'
 
 const people = [
   {
@@ -21,8 +23,19 @@ const people = [
 
 const recent = [people[0]]
 
+const fetchIngredients = async (filters) => {
+  const { data } = await axios.get(`/api/ingredients`, {
+    params: filters,
+  })
+
+  return data
+}
+
 const IngredientsModal = ({ open, handleClose }) => {
   const [query, setQuery] = useState('')
+  const [page, setPage] = useState(0)
+  const [total, setTotal] = useState(0)
+  const [ingredients, setIngredients] = useState([])
 
   const filteredPeople =
     query === ''
@@ -31,12 +44,19 @@ const IngredientsModal = ({ open, handleClose }) => {
           return person.name.toLowerCase().includes(query.toLowerCase())
         })
 
+  const ingredientsQuery = useQuery(['ingredients', query, page], () => fetchIngredients({ keyword: query, page }), {
+    onSuccess: ({ data, total }) => {
+      setIngredients(data)
+      setTotal(total)
+    },
+    enabled: false,
+  })
+
   const [age, setAge] = React.useState('')
 
   const handleChange = (event: SelectChangeEvent) => {
     setAge(event.target.value)
   }
-  console.debug(filteredPeople)
 
   return (
     <Transition.Root show={open} as={Fragment} afterLeave={() => setQuery('')} appear>
