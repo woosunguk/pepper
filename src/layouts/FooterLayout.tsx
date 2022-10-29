@@ -3,7 +3,9 @@ import { Bars3Icon, CheckCircleIcon, HomeIcon, PlusIcon, XMarkIcon } from '@hero
 import { Button } from '@mui/material'
 import clsx from 'clsx'
 import { signIn, signOut, useSession } from 'next-auth/react'
+import { useRouter } from 'next/router'
 import React, { Fragment, useState } from 'react'
+import { useCreatePosts } from 'src/hooks/posts/useCreatePosts'
 import Layout from './Layout'
 
 const navigationFooter = [
@@ -207,10 +209,21 @@ const people = [
 ]
 
 const FooterLayout = ({ children }: { children: React.ReactNode }) => {
+  const route = useRouter()
+  const { mutate: createPosts } = useCreatePosts()
+
   const [open, setOpen] = useState(false)
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   const { data: session } = useSession()
+
+  const handleCreatePosts = () => {
+    createPosts(null, {
+      onSuccess: ({ data }) => {
+        route.push(`/posts/${data.insertedId}`)
+      },
+    })
+  }
 
   const [selectedPeople, setSelectedPeople] = useState([people[0], people[1]])
 
@@ -569,7 +582,7 @@ const FooterLayout = ({ children }: { children: React.ReactNode }) => {
                       {session ? <></> : <div onClick={() => signIn()}>Sign in</div>}
 
                       {/* 글쓰기 */}
-                      <Button className="ml-6" variant="contained">
+                      <Button className="ml-6" variant="contained" onClick={handleCreatePosts}>
                         <PlusIcon className="w-4 h-4 mr-1" />
                         <span className="text-sm">글쓰기</span>
                       </Button>

@@ -18,6 +18,9 @@ import FooterLayout from '@/layouts/FooterLayout'
 import Editor from '@/components/editor'
 import { signIn, signOut, useSession } from 'next-auth/react'
 import clsx from 'clsx'
+import { LexicalComposer } from '@lexical/react/LexicalComposer'
+import exampleTheme from '@/components/editor/themes/ExampleTheme'
+import RecipeNodes from '@/components/editor/RecipeNodes'
 
 const people = [
   { id: 1, name: 'Durward Reynolds' },
@@ -313,7 +316,18 @@ const Index = () => {
             {/* Start main area*/}
             <h1 className="text-4xl font-bold py-14">Lexical Editor</h1>
             <div className="">
-              <Editor />
+              <LexicalComposer
+                initialConfig={{
+                  namespace: 'Playground',
+                  theme: exampleTheme,
+                  nodes: [...RecipeNodes],
+                  onError(error) {
+                    throw error
+                  },
+                }}
+              >
+                <Editor />
+              </LexicalComposer>
             </div>
             {/* End main area */}
           </main>
