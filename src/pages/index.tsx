@@ -1,281 +1,232 @@
-import { Fragment, useState } from 'react'
-import { Dialog, Listbox, Menu, Popover, Tab, Transition } from '@headlessui/react'
-import {
-  Bars3Icon,
-  CalendarIcon,
-  HomeIcon,
-  MagnifyingGlassCircleIcon,
-  MapIcon,
-  MegaphoneIcon,
-  UserGroupIcon,
-  MagnifyingGlassIcon,
-  PlusIcon,
-  ShoppingBagIcon,
-  XMarkIcon,
-} from '@heroicons/react/24/outline'
-import { Button } from '@mui/material'
 import FooterLayout from '@/layouts/FooterLayout'
-import Editor from '@/components/editor'
-import { signIn, signOut, useSession } from 'next-auth/react'
+import { Disclosure, Menu, Transition } from '@headlessui/react'
+import { ChevronDownIcon, FunnelIcon } from '@heroicons/react/20/solid'
+import { Avatar, Button, Chip, TextField } from '@mui/material'
 import clsx from 'clsx'
-import { LexicalComposer } from '@lexical/react/LexicalComposer'
-import exampleTheme from '@/components/editor/themes/ExampleTheme'
-import RecipeNodes from '@/components/editor/RecipeNodes'
+import { useSession } from 'next-auth/react'
+import Image from 'next/image'
+import { useRouter } from 'next/router'
+import { Fragment, useDeferredValue, useMemo, useState } from 'react'
+import { usePosts } from 'src/hooks/posts/usePosts'
 
-const people = [
-  { id: 1, name: 'Durward Reynolds' },
-  { id: 2, name: 'Kenton Towne' },
-  { id: 3, name: 'Therese Wunsch' },
-  { id: 4, name: 'Benedict Kessler' },
-  { id: 5, name: 'Katelyn Rohan' },
-]
-const navigation3 = [
-  { name: 'Dashboard', href: '#', icon: HomeIcon, current: true },
-  { name: 'Calendar', href: '#', icon: CalendarIcon, current: false },
-  { name: 'Teams', href: '#', icon: UserGroupIcon, current: false },
-  { name: 'Directory', href: '#', icon: MagnifyingGlassCircleIcon, current: false },
-  { name: 'Announcements', href: '#', icon: MegaphoneIcon, current: false },
-  { name: 'Office Map', href: '#', icon: MapIcon, current: false },
-]
-
-const user = {
-  name: 'Lisa Marie',
-  email: 'lisamarie@example.com',
-  imageUrl:
-    'https://images.unsplash.com/photo-1517365830460-955ce3ccd263?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=256&h=256&q=80',
-}
-
-const navigation = {
-  categories: [
-    {
-      id: 'pepper',
-      name: 'Pepper',
-      featured: [
-        {
-          name: 'New Arrivals',
-          href: '#',
-          imageSrc: 'https://tailwindui.com/img/ecommerce-images/mega-menu-category-01.jpg',
-          imageAlt: 'Models sitting back to back, wearing Basic Tee in black and bone.',
-        },
-        {
-          name: 'Basic Tees',
-          href: '#',
-          imageSrc: 'https://tailwindui.com/img/ecommerce-images/mega-menu-category-02.jpg',
-          imageAlt: 'Close up of Basic Tee fall bundle with off-white, ochre, olive, and black tees.',
-        },
-      ],
-      sections: [
-        {
-          id: 'clothing',
-          name: 'Clothing',
-          items: [
-            { name: 'Tops', href: '#' },
-            { name: 'Dresses', href: '#' },
-            { name: 'Pants', href: '#' },
-            { name: 'Denim', href: '#' },
-            { name: 'Sweaters', href: '#' },
-            { name: 'T-Shirts', href: '#' },
-            { name: 'Jackets', href: '#' },
-            { name: 'Activewear', href: '#' },
-            { name: 'Browse All', href: '#' },
-          ],
-        },
-        {
-          id: 'accessories',
-          name: 'Accessories',
-          items: [
-            { name: 'Watches', href: '#' },
-            { name: 'Wallets', href: '#' },
-            { name: 'Bags', href: '#' },
-            { name: 'Sunglasses', href: '#' },
-            { name: 'Hats', href: '#' },
-            { name: 'Belts', href: '#' },
-          ],
-        },
-        {
-          id: 'brands',
-          name: 'Brands',
-          items: [
-            { name: 'Full Nelson', href: '#' },
-            { name: 'My Way', href: '#' },
-            { name: 'Re-Arranged', href: '#' },
-            { name: 'Counterfeit', href: '#' },
-            { name: 'Significant Other', href: '#' },
-          ],
-        },
-      ],
-    },
-    {
-      id: 'curry',
-      name: 'Curry',
-      featured: [
-        {
-          name: 'New Arrivals',
-          href: '#',
-          imageSrc: 'https://tailwindui.com/img/ecommerce-images/product-page-04-detail-product-shot-01.jpg',
-          imageAlt: 'Drawstring top with elastic loop closure and textured interior padding.',
-        },
-        {
-          name: 'Artwork Tees',
-          href: '#',
-          imageSrc: 'https://tailwindui.com/img/ecommerce-images/category-page-02-image-card-06.jpg',
-          imageAlt:
-            'Three shirts in gray, white, and blue arranged on table with same line drawing of hands and shapes overlapping on front of shirt.',
-        },
-      ],
-      sections: [
-        {
-          id: 'clothing',
-          name: 'Clothing',
-          items: [
-            { name: 'Tops', href: '#' },
-            { name: 'Pants', href: '#' },
-            { name: 'Sweaters', href: '#' },
-            { name: 'T-Shirts', href: '#' },
-            { name: 'Jackets', href: '#' },
-            { name: 'Activewear', href: '#' },
-            { name: 'Browse All', href: '#' },
-          ],
-        },
-        {
-          id: 'accessories',
-          name: 'Accessories',
-          items: [
-            { name: 'Watches', href: '#' },
-            { name: 'Wallets', href: '#' },
-            { name: 'Bags', href: '#' },
-            { name: 'Sunglasses', href: '#' },
-            { name: 'Hats', href: '#' },
-            { name: 'Belts', href: '#' },
-          ],
-        },
-        {
-          id: 'brands',
-          name: 'Brands',
-          items: [
-            { name: 'Re-Arranged', href: '#' },
-            { name: 'Counterfeit', href: '#' },
-            { name: 'Full Nelson', href: '#' },
-            { name: 'My Way', href: '#' },
-          ],
-        },
-      ],
-    },
-  ],
-  pages: [
-    { name: 'Company', href: '/posts' },
-    { name: 'Stores', href: '/ingredients' },
-  ],
-}
-
-const userNavigation = [
-  { name: 'Your Profile', href: '#' },
-  { name: 'Settings', href: '#' },
+const ingredients = [
+  {
+    title: '카레가루',
+    description: '',
+    volume: '100',
+    volume_unit: 'g',
+    image_src:
+      'https://previews.123rf.com/images/andreyst/andreyst1406/andreyst140600638/28955690-%EA%B3%A0%EB%A6%BD-%EB%90%9C-%EB%94%9C%EC%99%80-%EC%B9%B4%EB%A0%88-%EA%B0%80%EB%A3%A8.jpg',
+  },
+  {
+    title: '양파',
+    description: '',
+    volume: '1',
+    volume_unit: '개',
+    image_src: 'https://health.chosun.com/site/data/img_dir/2020/12/16/2020121601824_0.jpg',
+  },
+  {
+    title: '당근',
+    description: '',
+    volume: '1',
+    volume_unit: '개',
+    image_src: 'https://static.megamart.com/product/image/0116/01160796/01160796_1_960.jpg',
+  },
+  {
+    title: '감자',
+    description: '',
+    volume: '1',
+    volume_unit: '개',
+    image_src: 'http://health.chosun.com/site/data/img_dir/2020/05/07/2020050702573_0.jpg',
+  },
+  {
+    title: '돼지고기',
+    description: '삼겹살, 앞다리, 뒷다리',
+    volume: '100',
+    volume_unit: 'g',
+    image_src: 'https://cdn.mkhealth.co.kr/news/photo/202101/51824_52458_4142.jpg',
+  },
+  {
+    title: '진간장',
+    description: '',
+    volume: '15',
+    volume_unit: 'ml',
+    image_src: 'https://www.sempio.com/image/ZH/XA/2020031309591107743a47faa-d242-4a87-b1b2-73f2a39e90a3.png',
+  },
+  {
+    title: '케첩',
+    description: '',
+    volume: '30',
+    volume_unit: 'ml',
+    image_src: 'https://m.ichibanhouse.com/web/product/big/202012/684611a792931870785cd9245c95d3e1.jpg',
+  },
+  {
+    title: '버터',
+    description: '',
+    volume: '',
+    volume_unit: '',
+    image_src: 'https://img-cf.kurly.com/shop/data/goodsview/20220620/gv10000328295_1.jpg',
+  },
+  {
+    title: '후추',
+    description: '',
+    volume: '',
+    volume_unit: '',
+    image_src: 'https://img.danawa.com/prod_img/500000/038/789/img/2789038_1.jpg?shrink=330:330&_v=20161108190618',
+  },
+  {
+    title: '식용유',
+    description: '',
+    volume: '',
+    volume_unit: '',
+    image_src: 'https://img.danawa.com/prod_img/500000/606/755/img/1755606_1.jpg?shrink=330:330&_v=20200910162546',
+  },
+  {
+    title: '물',
+    description: '',
+    volume: '700',
+    volume_unit: 'ml',
+    image_src: 'https://t1.daumcdn.net/cfile/tistory/99B5EC335982A2BF18',
+  },
 ]
 
-const navigation2 = {
-  solutions: [
-    { name: 'Marketing', href: '#' },
-    { name: 'Analytics', href: '#' },
-    { name: 'Commerce', href: '#' },
-    { name: 'Insights', href: '#' },
+const filters2 = {
+  price: [
+    { value: '0', label: '$0 - $25', checked: false },
+    { value: '25', label: '$25 - $50', checked: false },
+    { value: '50', label: '$50 - $75', checked: false },
+    { value: '75', label: '$75+', checked: false },
   ],
-  support: [
-    { name: 'Pricing', href: '#' },
-    { name: 'Documentation', href: '#' },
-    { name: 'Guides', href: '#' },
-    { name: 'API Status', href: '#' },
+  color: [
+    { value: 'white', label: 'White', checked: false },
+    { value: 'beige', label: 'Beige', checked: false },
+    { value: 'blue', label: 'Blue', checked: true },
+    { value: 'brown', label: 'Brown', checked: false },
+    { value: 'green', label: 'Green', checked: false },
+    { value: 'purple', label: 'Purple', checked: false },
   ],
-  company: [
-    { name: 'About', href: '#' },
-    { name: 'Blog', href: '#' },
-    { name: 'Jobs', href: '#' },
-    { name: 'Press', href: '#' },
-    { name: 'Partners', href: '#' },
+  size: [
+    { value: 'xs', label: 'XS', checked: false },
+    { value: 's', label: 'S', checked: true },
+    { value: 'm', label: 'M', checked: false },
+    { value: 'l', label: 'L', checked: false },
+    { value: 'xl', label: 'XL', checked: false },
+    { value: '2xl', label: '2XL', checked: false },
   ],
-  legal: [
-    { name: 'Claim', href: '#' },
-    { name: 'Privacy', href: '#' },
-    { name: 'Terms', href: '#' },
-  ],
-  social: [
-    {
-      name: 'Facebook',
-      href: '#',
-      icon: (props) => (
-        <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
-          <path
-            fillRule="evenodd"
-            d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z"
-            clipRule="evenodd"
-          />
-        </svg>
-      ),
-    },
-    {
-      name: 'Instagram',
-      href: '#',
-      icon: (props) => (
-        <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
-          <path
-            fillRule="evenodd"
-            d="M12.315 2c2.43 0 2.784.013 3.808.06 1.064.049 1.791.218 2.427.465a4.902 4.902 0 011.772 1.153 4.902 4.902 0 011.153 1.772c.247.636.416 1.363.465 2.427.048 1.067.06 1.407.06 4.123v.08c0 2.643-.012 2.987-.06 4.043-.049 1.064-.218 1.791-.465 2.427a4.902 4.902 0 01-1.153 1.772 4.902 4.902 0 01-1.772 1.153c-.636.247-1.363.416-2.427.465-1.067.048-1.407.06-4.123.06h-.08c-2.643 0-2.987-.012-4.043-.06-1.064-.049-1.791-.218-2.427-.465a4.902 4.902 0 01-1.772-1.153 4.902 4.902 0 01-1.153-1.772c-.247-.636-.416-1.363-.465-2.427-.047-1.024-.06-1.379-.06-3.808v-.63c0-2.43.013-2.784.06-3.808.049-1.064.218-1.791.465-2.427a4.902 4.902 0 011.153-1.772A4.902 4.902 0 015.45 2.525c.636-.247 1.363-.416 2.427-.465C8.901 2.013 9.256 2 11.685 2h.63zm-.081 1.802h-.468c-2.456 0-2.784.011-3.807.058-.975.045-1.504.207-1.857.344-.467.182-.8.398-1.15.748-.35.35-.566.683-.748 1.15-.137.353-.3.882-.344 1.857-.047 1.023-.058 1.351-.058 3.807v.468c0 2.456.011 2.784.058 3.807.045.975.207 1.504.344 1.857.182.466.399.8.748 1.15.35.35.683.566 1.15.748.353.137.882.3 1.857.344 1.054.048 1.37.058 4.041.058h.08c2.597 0 2.917-.01 3.96-.058.976-.045 1.505-.207 1.858-.344.466-.182.8-.398 1.15-.748.35-.35.566-.683.748-1.15.137-.353.3-.882.344-1.857.048-1.055.058-1.37.058-4.041v-.08c0-2.597-.01-2.917-.058-3.96-.045-.976-.207-1.505-.344-1.858a3.097 3.097 0 00-.748-1.15 3.098 3.098 0 00-1.15-.748c-.353-.137-.882-.3-1.857-.344-1.023-.047-1.351-.058-3.807-.058zM12 6.865a5.135 5.135 0 110 10.27 5.135 5.135 0 010-10.27zm0 1.802a3.333 3.333 0 100 6.666 3.333 3.333 0 000-6.666zm5.338-3.205a1.2 1.2 0 110 2.4 1.2 1.2 0 010-2.4z"
-            clipRule="evenodd"
-          />
-        </svg>
-      ),
-    },
-    {
-      name: 'Twitter',
-      href: '#',
-      icon: (props) => (
-        <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
-          <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
-        </svg>
-      ),
-    },
-    {
-      name: 'GitHub',
-      href: '#',
-      icon: (props) => (
-        <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
-          <path
-            fillRule="evenodd"
-            d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"
-            clipRule="evenodd"
-          />
-        </svg>
-      ),
-    },
-    {
-      name: 'Dribbble',
-      href: '#',
-      icon: (props) => (
-        <svg fill="currentColor" viewBox="0 0 24 24" {...props}>
-          <path
-            fillRule="evenodd"
-            d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10c5.51 0 10-4.48 10-10S17.51 2 12 2zm6.605 4.61a8.502 8.502 0 011.93 5.314c-.281-.054-3.101-.629-5.943-.271-.065-.141-.12-.293-.184-.445a25.416 25.416 0 00-.564-1.236c3.145-1.28 4.577-3.124 4.761-3.362zM12 3.475c2.17 0 4.154.813 5.662 2.148-.152.216-1.443 1.941-4.48 3.08-1.399-2.57-2.95-4.675-3.189-5A8.687 8.687 0 0112 3.475zm-3.633.803a53.896 53.896 0 013.167 4.935c-3.992 1.063-7.517 1.04-7.896 1.04a8.581 8.581 0 014.729-5.975zM3.453 12.01v-.26c.37.01 4.512.065 8.775-1.215.25.477.477.965.694 1.453-.109.033-.228.065-.336.098-4.404 1.42-6.747 5.303-6.942 5.629a8.522 8.522 0 01-2.19-5.705zM12 20.547a8.482 8.482 0 01-5.239-1.8c.152-.315 1.888-3.656 6.703-5.337.022-.01.033-.01.054-.022a35.318 35.318 0 011.823 6.475 8.4 8.4 0 01-3.341.684zm4.761-1.465c-.086-.52-.542-3.015-1.659-6.084 2.679-.423 5.022.271 5.314.369a8.468 8.468 0 01-3.655 5.715z"
-            clipRule="evenodd"
-          />
-        </svg>
-      ),
-    },
+  category: [
+    { value: 'all-new-arrivals', label: 'All New Arrivals', checked: false },
+    { value: 'tees', label: 'Tees', checked: false },
+    { value: 'objects', label: 'Objects', checked: false },
+    { value: 'sweatshirts', label: 'Sweatshirts', checked: false },
+    { value: 'pants-and-shorts', label: 'Pants & Shorts', checked: false },
   ],
 }
+const sortOptions = [
+  { name: 'Most Popular', href: '#', current: true },
+  { name: 'Best Rating', href: '#', current: false },
+  { name: 'Newest', href: '#', current: false },
+]
 
-function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
+const Post = ({ item }) => {
+  return (
+    <div key={item._id} className="px-5 py-4 my-3 bg-gray-200 rounded-lg">
+      <div className="flex justify-between mb-4">
+        <div className="flex items-center space-x-2">
+          <p className="text-xl font-bold">{item.title}</p>
+          {item.status == 0 && <Chip label="출판 전" size="small" color="secondary" />}
+        </div>
+      </div>
+
+      <div className="flex items-center justify-between">
+        <div className="flex items-center space-x-2">
+          {ingredients.map((item) => (
+            <div className="flex items-center" key={item.title}>
+              <Avatar alt={item.title} src={item.image_src} sx={{ width: 20, height: 20 }} />
+            </div>
+          ))}
+        </div>
+        <div>
+          <div className="flex flex-col">
+            <div className="flex items-center space-x-2">
+              <Image src={item.user.image} width={20} height={20} alt="" />
+              <p>{item.user.name}</p>
+              <p>|</p>
+              <p>2020.10.30</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+const Posts = ({ posts }) => {
+  const router = useRouter()
+
+  if (posts == undefined) {
+    return <></>
+  }
+
+  return (
+    <>
+      <div>
+        {posts
+          ?.filter((item) => {
+            return item.status == 0
+          })
+          .map((item) => (
+            <div key={item._id} onClick={() => router.push(`/posts/${item._id}`)}>
+              <Post item={item} />
+            </div>
+          ))}
+      </div>
+      <div className="my-8">
+        <hr />
+      </div>
+      <div>
+        {posts
+          ?.filter((item) => {
+            return item.status == 1
+          })
+          .map((item) => (
+            <div key={item._id} onClick={() => router.push(`/posts/${item._id}`)}>
+              <Post item={item} />
+            </div>
+          ))}
+      </div>
+    </>
+  )
 }
 
 const Index = () => {
-  const [open, setOpen] = useState(false)
-  const [sidebarOpen, setSidebarOpen] = useState(false)
-
   const { data: session } = useSession()
 
-  const [selectedPeople, setSelectedPeople] = useState([people[0], people[1]])
+  const [filters, setFilters] = useState({
+    keyword: '',
+    page: 0,
+    per_page: 10,
+  })
+  // const [isPending, startTransition] = useTransition()
+  const deferredQuery = useDeferredValue(filters)
 
-  console.debug(session)
+  const posts = usePosts({
+    filters,
+  })
+
+  console.debug(deferredQuery)
+
+  const onChangeKeyword = (event) => {
+    const { value } = event.target
+
+    setFilters({ ...filters, keyword: value })
+    // startTransition(() => {
+    //   setFilters({ ...filters, keyword: value })
+    // })
+  }
+
+  const handleSearch = () => {
+    posts.refetch()
+  }
 
   return (
     <div className="flex flex-1 h-full">
@@ -311,31 +262,203 @@ const Index = () => {
         </div>
       </div>
       <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
+        <div className="p-8">
+          <div>
+            {/* Filters */}
+            <Disclosure
+              as="section"
+              aria-labelledby="filter-heading"
+              className="grid items-center border-t border-b border-gray-200"
+            >
+              <h2 id="filter-heading" className="sr-only">
+                Filters
+              </h2>
+              <div className="relative col-start-1 row-start-1 py-4">
+                <p>FILTER</p>
+                <div className="flex items-center justify-start mb-4 space-x-11">
+                  <p>키워드</p>
+                  <TextField
+                    className="max-w-sm"
+                    size="small"
+                    fullWidth
+                    value={filters.keyword}
+                    onChange={onChangeKeyword}
+                  />
+                  <Button variant="contained" color="secondary" onClick={handleSearch}>
+                    검색
+                  </Button>
+                </div>
+                <div className="flex justify-between space-x-6 text-sm divide-x divide-gray-200">
+                  <div className="flex">
+                    <div>
+                      <Disclosure.Button className="flex items-center font-medium text-gray-700 group">
+                        <FunnelIcon
+                          className="flex-none w-5 h-5 mr-2 text-gray-400 group-hover:text-gray-500"
+                          aria-hidden="true"
+                        />
+                        2 Filters
+                      </Disclosure.Button>
+                    </div>
+                    <div className="pl-6">
+                      <button type="button" className="text-gray-500">
+                        Clear all
+                      </button>
+                    </div>
+                  </div>
+                  <div className="flex justify-end px-4 mx-auto max-w-7xl sm:px-6 lg:px-8">
+                    <Menu as="div" className="relative inline-block">
+                      <div className="flex">
+                        <Menu.Button className="inline-flex justify-center text-sm font-medium text-gray-700 group hover:text-gray-900">
+                          Sort : 날짜
+                          <ChevronDownIcon
+                            className="flex-shrink-0 w-5 h-5 ml-1 -mr-1 text-gray-400 group-hover:text-gray-500"
+                            aria-hidden="true"
+                          />
+                        </Menu.Button>
+                      </div>
+
+                      <Transition
+                        as={Fragment}
+                        enter="transition ease-out duration-100"
+                        enterFrom="transform opacity-0 scale-95"
+                        enterTo="transform opacity-100 scale-100"
+                        leave="transition ease-in duration-75"
+                        leaveFrom="transform opacity-100 scale-100"
+                        leaveTo="transform opacity-0 scale-95"
+                      >
+                        <Menu.Items className="absolute right-0 z-10 w-40 mt-2 origin-top-right bg-white rounded-md shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none">
+                          <div className="py-1">
+                            {sortOptions.map((option) => (
+                              <Menu.Item key={option.name}>
+                                {({ active }) => (
+                                  <a
+                                    href={option.href}
+                                    className={clsx(
+                                      option.current ? 'font-medium text-gray-900' : 'text-gray-500',
+                                      active ? 'bg-gray-100' : '',
+                                      'block px-4 py-2 text-sm'
+                                    )}
+                                  >
+                                    {option.name}
+                                  </a>
+                                )}
+                              </Menu.Item>
+                            ))}
+                          </div>
+                        </Menu.Items>
+                      </Transition>
+                    </Menu>
+                  </div>
+                </div>
+              </div>
+              <Disclosure.Panel className="py-10 border-t border-gray-200">
+                <div className="grid grid-cols-2 px-4 mx-auto text-sm max-w-7xl gap-x-4 sm:px-6 md:gap-x-6 lg:px-8">
+                  <div className="grid grid-cols-1 auto-rows-min gap-y-10 md:grid-cols-2 md:gap-x-6">
+                    <fieldset>
+                      <legend className="block font-medium">Price</legend>
+                      <div className="pt-6 space-y-6 sm:space-y-4 sm:pt-4">
+                        {filters2.price.map((option, optionIdx) => (
+                          <div key={option.value} className="flex items-center text-base sm:text-sm">
+                            <input
+                              id={`price-${optionIdx}`}
+                              name="price[]"
+                              defaultValue={option.value}
+                              type="checkbox"
+                              className="flex-shrink-0 w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+                              defaultChecked={option.checked}
+                            />
+                            <label htmlFor={`price-${optionIdx}`} className="flex-1 min-w-0 ml-3 text-gray-600">
+                              {option.label}
+                            </label>
+                          </div>
+                        ))}
+                      </div>
+                    </fieldset>
+                    <fieldset>
+                      <legend className="block font-medium">Color</legend>
+                      <div className="pt-6 space-y-6 sm:space-y-4 sm:pt-4">
+                        {filters2.color.map((option, optionIdx) => (
+                          <div key={option.value} className="flex items-center text-base sm:text-sm">
+                            <input
+                              id={`color-${optionIdx}`}
+                              name="color[]"
+                              defaultValue={option.value}
+                              type="checkbox"
+                              className="flex-shrink-0 w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+                              defaultChecked={option.checked}
+                            />
+                            <label htmlFor={`color-${optionIdx}`} className="flex-1 min-w-0 ml-3 text-gray-600">
+                              {option.label}
+                            </label>
+                          </div>
+                        ))}
+                      </div>
+                    </fieldset>
+                  </div>
+                  <div className="grid grid-cols-1 auto-rows-min gap-y-10 md:grid-cols-2 md:gap-x-6">
+                    <fieldset>
+                      <legend className="block font-medium">Size</legend>
+                      <div className="pt-6 space-y-6 sm:space-y-4 sm:pt-4">
+                        {filters2.size.map((option, optionIdx) => (
+                          <div key={option.value} className="flex items-center text-base sm:text-sm">
+                            <input
+                              id={`size-${optionIdx}`}
+                              name="size[]"
+                              defaultValue={option.value}
+                              type="checkbox"
+                              className="flex-shrink-0 w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+                              defaultChecked={option.checked}
+                            />
+                            <label htmlFor={`size-${optionIdx}`} className="flex-1 min-w-0 ml-3 text-gray-600">
+                              {option.label}
+                            </label>
+                          </div>
+                        ))}
+                      </div>
+                    </fieldset>
+                    <fieldset>
+                      <legend className="block font-medium">Category</legend>
+                      <div className="pt-6 space-y-6 sm:space-y-4 sm:pt-4">
+                        {filters2.category.map((option, optionIdx) => (
+                          <div key={option.value} className="flex items-center text-base sm:text-sm">
+                            <input
+                              id={`category-${optionIdx}`}
+                              name="category[]"
+                              defaultValue={option.value}
+                              type="checkbox"
+                              className="flex-shrink-0 w-4 h-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+                              defaultChecked={option.checked}
+                            />
+                            <label htmlFor={`category-${optionIdx}`} className="flex-1 min-w-0 ml-3 text-gray-600">
+                              {option.label}
+                            </label>
+                          </div>
+                        ))}
+                      </div>
+                    </fieldset>
+                  </div>
+                </div>
+              </Disclosure.Panel>
+            </Disclosure>
+          </div>
+        </div>
         <div className="relative z-0 flex flex-1 overflow-hidden">
           <main className="relative z-0 flex-1 px-4 py-6 overflow-y-auto focus:outline-none xl:order-last sm:px-6 lg:px-8">
             {/* Start main area*/}
-            <h1 className="text-4xl font-bold py-14">Lexical Editor</h1>
+            <h1 className="text-4xl font-bold py-14">레시피</h1>
             <div className="">
-              <LexicalComposer
-                initialConfig={{
-                  namespace: 'Playground',
-                  theme: exampleTheme,
-                  nodes: [...RecipeNodes],
-                  onError(error) {
-                    throw error
-                  },
-                }}
-              >
-                <Editor />
-              </LexicalComposer>
+              <Posts posts={posts?.data?.data} />
             </div>
             {/* End main area */}
           </main>
           <aside className="relative flex-shrink-0 hidden overflow-y-auto border-r border-gray-200 w-96 xl:order-first xl:flex xl:flex-col">
             {/* Start secondary column (hidden on smaller screens) */}
             <div className="absolute inset-0 px-4 py-6 sm:px-6 lg:px-8">
-              <div className="h-full border-2 border-gray-200 border-dashed rounded-lg" />
+              <div className="h-full border-2 border-gray-200 border-dashed rounded-lg">
+                {/* <Posts posts={posts?.data?.data} /> */}
+              </div>
             </div>
+
             {/* End secondary column */}
           </aside>
         </div>

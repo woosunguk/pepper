@@ -1,14 +1,18 @@
 import { useQuery } from '@tanstack/react-query'
 import axios from 'axios'
 
-const fetchPosts = async (limit = 10) => {
-  const parsed = (await axios.get('https://jsonplaceholder.typicode.com/posts')).data
-  const result = parsed.filter((x) => x.id <= limit)
-  return result
+const fetchPosts = async (params) => {
+  const { data } = await axios.get('/api/posts', {
+    params,
+  })
+
+  return data
 }
 
-const usePosts = (limit) => {
-  return useQuery(['posts', limit], () => fetchPosts(limit))
+const usePosts = (params) => {
+  return useQuery(['posts'], () => fetchPosts(params.filters), {
+    enabled: false,
+  })
 }
 
 export { usePosts, fetchPosts }
