@@ -1,9 +1,12 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import clientPromise from 'src/lib/mongodb'
 
-export default async function handler(_req: NextApiRequest, res: NextApiResponse) {
-  console.debug(_req.query)
-  const query = _req.query
+export default async function handler(_req, res) {
+  const query: {
+    keyword: string
+    page: string
+    per_page: string
+  } = _req.query
 
   // Get data from your database
   const client = await clientPromise
@@ -16,7 +19,7 @@ export default async function handler(_req: NextApiRequest, res: NextApiResponse
   res.status(200).json({
     total: await curosr.count(),
     data: await curosr
-      .skip(query.page * query.per_page)
+      .skip(parseInt(query.page) * parseInt(query.per_page))
       .limit(parseInt(query.per_page))
       .toArray(),
   })

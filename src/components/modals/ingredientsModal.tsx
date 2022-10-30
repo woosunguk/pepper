@@ -84,6 +84,7 @@ const IngredientsModal = ({ open, handleClose }) => {
             leaveTo="opacity-0 scale-95"
           >
             <Dialog.Panel className="max-w-5xl mx-auto overflow-hidden transition-all transform bg-white divide-y divide-gray-100 shadow-2xl rounded-xl ring-1 ring-black ring-opacity-5">
+              {/* @ts-ignore */}
               <Combobox onChange={(person) => (window.location = person.profileUrl)}>
                 {({ activeOption }) => (
                   <>
@@ -146,8 +147,11 @@ const IngredientsModal = ({ open, handleClose }) => {
                         {activeOption && (
                           <div className="flex-col flex-none hidden w-4/6 overflow-y-auto divide-y divide-gray-100 h-96 sm:flex">
                             <div className="flex-none p-6 text-center">
+                              {/* @ts-ignore */}
                               <img src={activeOption.imageUrl} alt="" className="w-16 h-16 mx-auto rounded-full" />
+                              {/* @ts-ignore */}
                               <h2 className="mt-3 font-semibold text-gray-900">{activeOption.name}</h2>
+                              {/* @ts-ignore */}
                               <p className="text-sm leading-6 text-gray-500">{activeOption.role}</p>
                             </div>
                             <div className="flex justify-between flex-auto p-6">

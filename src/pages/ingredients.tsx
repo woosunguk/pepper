@@ -582,7 +582,7 @@ const Ingredients = () => {
                     aria-label="Small"
                     valueLabelDisplay="auto"
                     onChangeCommitted={(event, value) => {
-                      console.debug(event, value)
+                      // @ts-ignore
                       setFilters({ ...filters, per_page: value })
                     }}
                   />
