@@ -96,7 +96,11 @@ export default function SignIn({ providers }: { providers: { name: string; id: a
                     <>
                       <button
                         key={provider.name}
-                        onClick={() => signIn(provider.id)}
+                        onClick={() =>
+                          signIn(provider.id, {
+                            callbackUrl: '/',
+                          })
+                        }
                         className="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50"
                       >
                         <img className="w-5 h-5" src="https://cdn-icons-png.flaticon.com/512/2991/2991148.png" />

@@ -565,7 +565,11 @@ const FooterLayout = ({ children }: { children: React.ReactNode }) => {
                             <Menu.Item key={'signout'}>
                               {({ active }) => (
                                 <p
-                                  onClick={() => signOut()}
+                                  onClick={() =>
+                                    signOut({
+                                      callbackUrl: '/auth/signin',
+                                    })
+                                  }
                                   className={clsx(
                                     active ? 'bg-gray-100' : '',
                                     'block py-2 px-4 text-sm text-gray-700 cursor-pointer'
