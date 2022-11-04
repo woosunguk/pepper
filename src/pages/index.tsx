@@ -1,13 +1,25 @@
 import FooterLayout from '@/layouts/FooterLayout'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { ChevronDownIcon, FunnelIcon } from '@heroicons/react/20/solid'
-import { Avatar, Button, Chip, TextField } from '@mui/material'
+import {
+  Autocomplete,
+  Avatar,
+  Button,
+  Chip,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  SelectChangeEvent,
+  TextField,
+} from '@mui/material'
 import clsx from 'clsx'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import { Fragment, useDeferredValue, useMemo, useState } from 'react'
+import React, { Fragment, useDeferredValue, useMemo, useState } from 'react'
 import { usePosts } from 'src/hooks/posts/usePosts'
+import top100Films from 'src/utils/top100'
 
 const ingredients = [
   {
@@ -228,6 +240,12 @@ const Index = () => {
     posts.refetch()
   }
 
+  const [age, setAge] = React.useState('')
+
+  const handleChange = (event: SelectChangeEvent) => {
+    setAge(event.target.value)
+  }
+
   return (
     <div className="flex flex-1 h-full">
       {/* Static sidebar for desktop */}
@@ -275,10 +293,42 @@ const Index = () => {
               </h2>
               <div className="relative col-start-1 row-start-1 py-4">
                 <p>FILTER</p>
-                <div className="flex items-center justify-start mb-4 space-x-11">
-                  <p>키워드</p>
+                <div className="flex items-center justify-start mb-4 space-x-4">
+                  <div>
+                    <Autocomplete
+                      fullWidth
+                      multiple
+                      id="tags-standard"
+                      options={top100Films}
+                      getOptionLabel={(option) => option.title}
+                      defaultValue={[top100Films[13]]}
+                      renderInput={(params) => (
+                        <TextField {...params} variant="standard" label="Multiple values" placeholder="Favorites" />
+                      )}
+                    />
+                  </div>
+                  <div>
+                    <FormControl variant="standard" sx={{ minWidth: 80 }}>
+                      <InputLabel id="demo-simple-select-standard-label">Age</InputLabel>
+                      <Select
+                        labelId="demo-simple-select-standard-label"
+                        id="demo-simple-select-standard"
+                        value={age}
+                        onChange={handleChange}
+                        label="Age"
+                      >
+                        <MenuItem value="">
+                          <em>None</em>
+                        </MenuItem>
+                        <MenuItem value={10}>Ten</MenuItem>
+                        <MenuItem value={20}>Twenty</MenuItem>
+                        <MenuItem value={30}>Thirty</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </div>
+
                   <TextField
-                    className="max-w-sm"
+                    className="w-60"
                     size="small"
                     fullWidth
                     value={filters.keyword}
