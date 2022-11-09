@@ -3,6 +3,7 @@ import { Bars3Icon, CheckCircleIcon, HomeIcon, PlusIcon, XMarkIcon } from '@hero
 import { Button } from '@mui/material'
 import clsx from 'clsx'
 import { signIn, signOut, useSession } from 'next-auth/react'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { Fragment, useState } from 'react'
 import { useCreatePosts } from 'src/hooks/posts/useCreatePosts'
@@ -195,8 +196,8 @@ const navigation = {
     },
   ],
   pages: [
-    { name: 'Company', href: '/posts' },
-    { name: 'Stores', href: '/ingredients' },
+    { name: 'Recipes', href: '/recipes' },
+    { name: 'Ingredients', href: '/ingredients' },
   ],
 }
 
@@ -398,14 +399,10 @@ const FooterLayout = ({ children }: { children: React.ReactNode }) => {
 
                     {/* Logo */}
                     <div className="flex ml-4 lg:ml-0">
-                      <a href="#">
+                      <Link href={'/'}>
                         <span className="sr-only">Your Company</span>
-                        <img
-                          className="w-auto h-8"
-                          src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                          alt=""
-                        />
-                      </a>
+                        <img className="w-auto h-8" src="/images/smile.png" alt="" />
+                      </Link>
                     </div>
 
                     {/* Flyout menus */}
