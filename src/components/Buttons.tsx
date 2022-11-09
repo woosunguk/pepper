@@ -8,6 +8,7 @@ const Button = React.forwardRef(function Button(
   return (
     <ButtonUnstyled
       {...props}
+      // @ts-ignore
       componentsProps={{
         root: (state: ButtonUnstyledOwnerState) => ({
           className: `hover:text-cyan-500 transition-colors ${
