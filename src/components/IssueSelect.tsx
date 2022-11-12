@@ -102,7 +102,7 @@ const IssueSelect = () => {
           size="small"
           value={issueName}
           onChange={handleChange}
-          input={<InputBase className="flex items-center px-3 py-1 bg-gray-200 rounded-lg" size="small" />}
+          input={<InputBase className="flex items-center px-3 py-1 bg-gray-200 rounded-3xl" size="small" />}
           displayEmpty
           MenuProps={{
             PaperProps: { sx: { left: `${position}px !important`, marginTop: '10px;' } },
