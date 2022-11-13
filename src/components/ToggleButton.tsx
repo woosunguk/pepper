@@ -4,9 +4,9 @@ import { CheckIcon } from '@heroicons/react/24/outline'
 import { styled } from '@mui/system'
 import { grey, red } from '@mui/material/colors'
 
-const StandaloneToggleButton2 = styled(ToggleButton)(() => ({
+export const RoundedToggle = styled(ToggleButton)(() => ({
   height: '2rem',
-  borderRadius: '1.5rem',
+  borderRadius: '2rem',
   backgroundColor: grey[100],
   ':hover': {
     backgroundColor: grey[100],
@@ -21,7 +21,7 @@ export default function StandaloneToggleButton() {
   const [selected, setSelected] = React.useState(false)
 
   return (
-    <StandaloneToggleButton2
+    <RoundedToggle
       value="check"
       sx={{}}
       selected={selected}
@@ -30,6 +30,6 @@ export default function StandaloneToggleButton() {
       }}
     >
       <p>Unread</p>
-    </StandaloneToggleButton2>
+    </RoundedToggle>
   )
 }

@@ -1,7 +1,12 @@
+import CustomizedDividers from '@/components/ToggleButton2'
 import React from 'react'
 
 const Jira = () => {
-  return <div>Jira</div>
+  return (
+    <>
+      <CustomizedDividers />
+    </>
+  )
 }
 
 export default Jira

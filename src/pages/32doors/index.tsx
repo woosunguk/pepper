@@ -4,6 +4,7 @@ import { Button } from '@mui/material'
 import { RocketLaunchIcon } from '@heroicons/react/24/solid'
 import StandaloneToggleButton from '@/components/ToggleButton'
 import CustomizedTabs from '@/components/Tabs'
+import CustomizedDividers from '@/components/ToggleButton2'
 
 const Index = () => {
   return (
@@ -30,8 +31,9 @@ const Index = () => {
           </div>
           <div className="flex items-center justify-center min-h-[9rem] bg-gray-200 rounded-md lg:h-full col-span-6 lg:col-span-1"></div>
           <div className="flex items-center justify-center min-h-[9rem] bg-gray-200 rounded-md lg:h-full col-span-6 lg:col-span-1"></div>
-          <div className="flex items-center justify-center min-h-[9rem] bg-gray-200 rounded-md lg:h-full col-span-6 lg:col-span-1"></div>
-          <div className="flex items-center justify-center min-h-[9rem] bg-gray-200 rounded-md lg:h-full col-span-6 lg:col-span-1"></div>
+          <div className="flex p-8 min-h-[9rem] bg-gray-200 rounded-md lg:h-full col-span-6 lg:col-span-4 lg:row-span-3">
+            <CustomizedDividers />
+          </div>
           <div className="flex items-center justify-center min-h-[9rem] bg-gray-200 rounded-md lg:h-full col-span-6 lg:col-span-1"></div>
           <div className="flex items-center justify-center min-h-[9rem] bg-gray-200 rounded-md lg:h-full col-span-6 lg:col-span-1"></div>
           <div className="relative flex items-center justify-center min-h-[9rem] bg-red-400 rounded-md lg:h-full col-span-6 lg:col-span-2">
