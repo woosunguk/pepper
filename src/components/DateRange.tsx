@@ -2,9 +2,8 @@ import * as React from 'react'
 import dayjs, { Dayjs } from 'dayjs'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
-import { DateRange, DateRangePicker, StaticDateRangePicker } from '@mui/x-date-pickers-pro'
+import { DateRange, DateRangePicker } from '@mui/x-date-pickers-pro'
 import {
-  TextField,
   Box,
   Typography,
   Divider,
@@ -14,7 +13,11 @@ import {
   ListItemText,
   Stack,
   Button,
+  TextField,
+  Backdrop,
+  CircularProgress,
 } from '@mui/material'
+import { useWindowSize } from 'rooks'
 
 const RangeShortcut = {
   thisWeek: 'THIS_WEEK',
@@ -83,9 +86,8 @@ const buildHandleRangeClick =
 
 const RangeShortcutsPanel: React.FC<{
   setValue?: React.Dispatch<React.SetStateAction<DateRange<Dayjs>>>
-  setOpen?: React.Dispatch<React.SetStateAction<boolean>>
   children: React.ReactNode
-}> = ({ setValue, setOpen, children }) => {
+}> = ({ setValue, children }) => {
   const handleRangeClick = React.useCallback(
     (range: RangeShortcutType) => setValue && buildHandleRangeClick(setValue)(range),
     [setValue]
@@ -118,57 +120,95 @@ export default function PaperContentComponent() {
   const [open, setOpen] = React.useState<boolean>(false)
 
   const updateValue = () => {
+    console.debug(value)
     setValue2(value)
     setOpen(!open)
   }
 
   return (
     <>
-      <div className="flex items-center">
-        <div
-          className="flex items-center px-3 py-1 space-x-4 bg-gray-300 rounded-md cursor-pointer"
-          onClick={() => setOpen(!open)}
-        >
-          <p>생성일 :</p>
-          {value[0] == null || value[1] == null ? (
-            <p>모두</p>
-          ) : (
-            <div className="flex items-center text-sm">
-              <p>{value2[0]?.format('YYYY.MM.DD')}</p>
-              <p className="mx-2">~</p>
-              <p>{value2[1]?.format('YYYY.MM.DD')}</p>
-            </div>
-          )}
-        </div>
-      </div>
-
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <Stack spacing={4} alignItems="center">
           <DateRangePicker
             onChange={(newValue) => setValue(newValue)}
             value={value}
-            open={open}
-            renderInput={() => <></>}
+            renderInput={(startProps, endProps) => {
+              console.debug(startProps)
+              return (
+                <div className="flex items-center cursor-pointer">
+                  {/* <React.Fragment>
+                    <TextField
+                      // sx={{ pointer: 'cursor' }}
+                      {...{
+                        ...startProps,
+                        label: '',
+                        inputProps: {
+                          ...startProps.inputProps,
+                          // readOnly: true,
+                          value: `${value2[0]?.format('YYYY.MM.DD')} ~ ${value2[1]?.format('YYYY.MM.DD')}`,
+                        },
+                      }}
+                    />
+                  </React.Fragment> */}
+
+                  <Button
+                    className="flex items-center px-3 space-x-4 bg-gray-200 rounded-md cursor-pointer"
+                    size="small"
+                    onClick={() => setOpen(!open)}
+                    ref={startProps.inputRef as React.Ref<HTMLInputElement>}
+                  >
+                    <p>생성일 :</p>
+                    {value2[0] == null || value2[1] == null ? (
+                      <p>모두</p>
+                    ) : (
+                      <div className="flex items-center text-sm">
+                        <p>{value2[0]?.format('YYYY.MM.DD')}</p>
+                        <p className="mx-2">~</p>
+                        <p>{value2[1]?.format('YYYY.MM.DD')}</p>
+                      </div>
+                    )}
+                  </Button>
+                </div>
+              )
+            }}
             components={{
               PaperContent: (props) => (
-                <RangeShortcutsPanel {...props}>
-                  <div className="flex flex-col">
-                    {props.children}
+                <>
+                  <RangeShortcutsPanel {...props}>
+                    <div className="flex flex-col">
+                      {props.children}
 
-                    <div className="flex items-center justify-end p-3 space-x-3">
-                      <Button variant="text" onClick={() => setOpen(false)}>
-                        닫기
-                      </Button>
-                      <Button variant="contained" color="primary" onClick={updateValue}>
-                        업데이트
-                      </Button>
+                      <div className="flex items-center justify-end p-3 space-x-3">
+                        <Button variant="text" onClick={() => setOpen(false)}>
+                          닫기
+                        </Button>
+                        <Button variant="contained" color="primary" onClick={updateValue}>
+                          업데이트
+                        </Button>
+                      </div>
                     </div>
-                  </div>
-                </RangeShortcutsPanel>
+                  </RangeShortcutsPanel>
+                </>
               ),
             }}
+            PopperProps={{
+              placement: 'bottom-start',
+              sx: { marginTop: '5px !important' },
+              open: open,
+            }}
             PaperProps={{ sx: { display: 'flex', flexDirection: 'row' } }}
-            componentsProps={{ paperContent: { setValue, updateValue, setOpen } }}
+            componentsProps={{ paperContent: { setValue, updateValue } }}
+            // TransitionComponent={(props) => (
+            //   <>
+            //     <Backdrop
+            //       sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+            //       open={open}
+            //       onClick={() => setOpen(false)}
+            //     >
+            //       {props.children}
+            //     </Backdrop>
+            //   </>
+            // )}
           />
         </Stack>
       </LocalizationProvider>

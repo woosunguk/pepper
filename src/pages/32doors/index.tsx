@@ -5,6 +5,7 @@ import { RocketLaunchIcon } from '@heroicons/react/24/solid'
 import StandaloneToggleButton from '@/components/ToggleButton'
 import CustomizedTabs from '@/components/Tabs'
 import CustomizedDividers from '@/components/ToggleButton2'
+import PaperContentComponent from '@/components/DateRange'
 
 const Index = () => {
   return (
@@ -17,25 +18,25 @@ const Index = () => {
           <div className="flex items-center justify-center min-h-[9rem] row-span-2  bg-yellow-300 rounded-md col-span-6 lg:col-span-3 lg:h-full">
             <IssueSelect />
           </div>
-          <div className="flex items-center justify-center min-h-[9rem] bg-gray-200 rounded-md lg:h-full col-span-6 lg:col-span-1">
+          <div className="flex items-center justify-center min-h-[9rem] bg-white rounded-md lg:h-full col-span-6 lg:col-span-1">
             <StandaloneToggleButton />
           </div>
-          <div className="flex items-center justify-center min-h-[9rem] bg-gray-200 rounded-md lg:h-full col-span-6 lg:col-span-1"></div>
-
-          <div className="flex items-center justify-center min-h-[9rem] bg-gray-200 rounded-md lg:h-full col-span-6 lg:col-span-1"></div>
+          <div className="flex items-center justify-center min-h-[9rem] bg-white rounded-md lg:h-full col-span-6 lg:col-span-1"></div>
+          <div className="flex items-center justify-center min-h-[9rem] bg-white rounded-md lg:h-full col-span-6 lg:col-span-1"></div>
 
           <div className="flex items-center justify-center min-h-[9rem] bg-white rounded-md lg:h-full col-span-6 lg:col-span-3">
             <div className="px-4">
               <CustomizedTabs />
             </div>
           </div>
-          <div className="flex items-center justify-center min-h-[9rem] bg-gray-200 rounded-md lg:h-full col-span-6 lg:col-span-1"></div>
-          <div className="flex items-center justify-center min-h-[9rem] bg-gray-200 rounded-md lg:h-full col-span-6 lg:col-span-1"></div>
-          <div className="flex p-8 min-h-[9rem] bg-gray-200 rounded-md lg:h-full col-span-6 lg:col-span-4 lg:row-span-3">
+          <div className="flex items-center justify-center min-h-[9rem] bg-white rounded-md lg:h-full col-span-6 lg:col-span-2">
+            <PaperContentComponent />
+          </div>
+          <div className="flex p-8 min-h-[9rem] bg-white rounded-md lg:h-full col-span-6 lg:col-span-4 lg:row-span-3">
             <CustomizedDividers />
           </div>
-          <div className="flex items-center justify-center min-h-[9rem] bg-gray-200 rounded-md lg:h-full col-span-6 lg:col-span-1"></div>
-          <div className="flex items-center justify-center min-h-[9rem] bg-gray-200 rounded-md lg:h-full col-span-6 lg:col-span-1"></div>
+          <div className="flex items-center justify-center min-h-[9rem] bg-white rounded-md lg:h-full col-span-6 lg:col-span-1"></div>
+          <div className="flex items-center justify-center min-h-[9rem] bg-white rounded-md lg:h-full col-span-6 lg:col-span-1"></div>
           <div className="relative flex items-center justify-center min-h-[9rem] bg-red-400 rounded-md lg:h-full col-span-6 lg:col-span-2">
             <Button className="flex items-center" variant="contained" color="error">
               <RocketLaunchIcon className="w-4 h-4 mr-2" />
@@ -50,10 +51,10 @@ const Index = () => {
               <p className="text-xs">엄지</p>
             </div>
           </div>
-          <div className="flex items-center justify-center min-h-[9rem] bg-gray-200 rounded-md lg:h-full col-span-6 lg:col-span-1"></div>
-          <div className="flex items-center justify-center min-h-[9rem] bg-gray-200 rounded-md lg:h-full col-span-6 lg:col-span-1"></div>
-          <div className="flex items-center justify-center min-h-[9rem] bg-gray-200 rounded-md lg:h-full col-span-6 lg:col-span-1"></div>
-          <div className="flex items-center justify-center min-h-[9rem] bg-gray-200 rounded-md lg:h-full col-span-6 lg:col-span-1"></div>
+          <div className="flex items-center justify-center min-h-[9rem] bg-white rounded-md lg:h-full col-span-6 lg:col-span-1"></div>
+          <div className="flex items-center justify-center min-h-[9rem] bg-white rounded-md lg:h-full col-span-6 lg:col-span-1"></div>
+          <div className="flex items-center justify-center min-h-[9rem] bg-white rounded-md lg:h-full col-span-6 lg:col-span-1"></div>
+          <div className="flex items-center justify-center min-h-[9rem] bg-white rounded-md lg:h-full col-span-6 lg:col-span-1"></div>
           <div className="flex items-center justify-center min-h-[9rem] bg-black rounded-md lg:h-full col-span-6 lg:col-span-1"></div>
         </div>
       </div>

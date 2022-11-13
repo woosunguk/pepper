@@ -1,3 +1,4 @@
+import PaperContentComponent from '@/components/DateRange'
 import IssueSelect from '@/components/IssueSelect'
 import FooterLayout from '@/layouts/FooterLayout'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
@@ -296,6 +297,7 @@ const Index = () => {
                 <p>FILTER</p>
                 <div className="flex items-center justify-start mb-4 space-x-4">
                   <IssueSelect />
+                  <PaperContentComponent />
 
                   <TextField
                     className="w-60"
