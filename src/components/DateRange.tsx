@@ -3,21 +3,7 @@ import dayjs, { Dayjs } from 'dayjs'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { DateRange, DateRangePicker } from '@mui/x-date-pickers-pro'
-import {
-  Box,
-  Typography,
-  Divider,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemText,
-  Stack,
-  Button,
-  TextField,
-  Backdrop,
-  CircularProgress,
-} from '@mui/material'
-import { useWindowSize } from 'rooks'
+import { Box, Typography, Divider, List, ListItem, ListItemButton, ListItemText, Stack, Button } from '@mui/material'
 
 const RangeShortcut = {
   thisWeek: 'THIS_WEEK',
@@ -132,31 +118,23 @@ export default function PaperContentComponent() {
           <DateRangePicker
             onChange={(newValue) => setValue(newValue)}
             value={value}
-            renderInput={(startProps, endProps) => {
-              console.debug(startProps)
+            closeOnSelect={false}
+            open={open}
+            onOpen={() => {
+              setOpen(!open)
+            }}
+            onClose={() => {
+              setOpen(false)
+            }}
+            renderInput={(params) => {
               return (
-                <div className="flex items-center cursor-pointer">
-                  {/* <React.Fragment>
-                    <TextField
-                      // sx={{ pointer: 'cursor' }}
-                      {...{
-                        ...startProps,
-                        label: '',
-                        inputProps: {
-                          ...startProps.inputProps,
-                          // readOnly: true,
-                          value: `${value2[0]?.format('YYYY.MM.DD')} ~ ${value2[1]?.format('YYYY.MM.DD')}`,
-                        },
-                      }}
-                    />
-                  </React.Fragment> */}
-
-                  <Button
-                    className="flex items-center px-3 space-x-4 bg-gray-200 rounded-md cursor-pointer"
-                    size="small"
-                    onClick={() => setOpen(!open)}
-                    ref={startProps.inputRef as React.Ref<HTMLInputElement>}
-                  >
+                <Button
+                  className="bg-gray-200 rounded-md cursor-pointer"
+                  size="small"
+                  ref={params.inputRef as React.Ref<HTMLInputElement>}
+                  onClick={(event) => params.inputProps.onClick(event as React.MouseEvent<HTMLInputElement>)}
+                >
+                  <div className="flex items-center px-3 space-x-4">
                     <p>생성일 :</p>
                     {value2[0] == null || value2[1] == null ? (
                       <p>모두</p>
@@ -167,8 +145,8 @@ export default function PaperContentComponent() {
                         <p>{value2[1]?.format('YYYY.MM.DD')}</p>
                       </div>
                     )}
-                  </Button>
-                </div>
+                  </div>
+                </Button>
               )
             }}
             components={{
@@ -191,24 +169,13 @@ export default function PaperContentComponent() {
                 </>
               ),
             }}
+            componentsProps={{ paperContent: { setValue, updateValue } }}
             PopperProps={{
               placement: 'bottom-start',
               sx: { marginTop: '5px !important' },
               open: open,
             }}
             PaperProps={{ sx: { display: 'flex', flexDirection: 'row' } }}
-            componentsProps={{ paperContent: { setValue, updateValue } }}
-            // TransitionComponent={(props) => (
-            //   <>
-            //     <Backdrop
-            //       sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-            //       open={open}
-            //       onClick={() => setOpen(false)}
-            //     >
-            //       {props.children}
-            //     </Backdrop>
-            //   </>
-            // )}
           />
         </Stack>
       </LocalizationProvider>
