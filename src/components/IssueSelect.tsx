@@ -4,8 +4,8 @@ import FormControl from '@mui/material/FormControl'
 import ListItemText from '@mui/material/ListItemText'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
 import Checkbox from '@mui/material/Checkbox'
-import { InputBase, TextField } from '@mui/material'
-import { MagnifyingGlassIcon } from '@heroicons/react/24/outline'
+import { Chip, InputBase, TextField } from '@mui/material'
+import { MagnifyingGlassIcon, PlusSmallIcon } from '@heroicons/react/24/outline'
 import { useWindowSize } from 'rooks'
 
 const defaultIssueTypes = [
@@ -102,23 +102,23 @@ const IssueSelect = () => {
           size="small"
           value={issueName}
           onChange={handleChange}
-          input={<InputBase className="flex items-center px-3 py-1 bg-gray-200 rounded-3xl" size="small" />}
+          input={<InputBase className="flex items-center px-3 py-1 bg-gray-200 rounded-md" size="small" />}
           displayEmpty
           MenuProps={{
             PaperProps: { sx: { left: `${position}px !important`, marginTop: '10px;' } },
           }}
-          //   MenuProps={{
-          //     PaperProps: {
-          //       sx: {
-          //         width: '250px',
-          //         maxHeight: `${60 * 6 + 8}px`,
-          //         '.MuiList-root': {
-          //           paddingTop: '0',
-          //           paddingBottom: '0',
-          //         },
+          // MenuProps={{
+          //   PaperProps: {
+          //     sx: {
+          //       width: '250px',
+          //       maxHeight: `${60 * 6 + 8}px`,
+          //       '.MuiList-root': {
+          //         paddingTop: '0',
+          //         paddingBottom: '0',
           //       },
           //     },
-          //   }}
+          //   },
+          // }}
           renderValue={(selected) => {
             return (
               <>
@@ -127,17 +127,18 @@ const IssueSelect = () => {
                   <div className="flex items-center space-x-1">
                     {selected.length != 0 && (
                       <>
-                        <p className="px-2">:</p>
+                        <p className="pl-1 pr-2">:</p>
                         <p className="">{issueTypes.find((issue) => issue.value == [...selected].shift()).title}</p>
                       </>
                     )}
                     {selected.length > 1 && (
                       <>
-                        <p className="">외</p>
-                        <p className="text-cyan-500" onClick={() => alert(1)}>
-                          {selected.length - 1}
-                        </p>
-                        <p>개</p>
+                        <Chip
+                          sx={{ paddingX: 0.4, '.MuiChip-label': { paddingX: 0.5 }, cursor: 'pointer' }}
+                          icon={<PlusSmallIcon className="w-4 h-4" />}
+                          label={(selected.length - 1).toString()}
+                          size="small"
+                        />
                       </>
                     )}
                   </div>

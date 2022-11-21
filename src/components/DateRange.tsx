@@ -86,8 +86,12 @@ const RangeShortcutsPanel: React.FC<{
           <List>
             {rangeShortcuts.map(({ range, label }) => (
               <ListItem key={range} disablePadding>
-                <ListItemButton onClick={() => handleRangeClick(range as RangeShortcutType)}>
-                  <ListItemText primary={label} />
+                <ListItemButton sx={{ paddingLeft: 1 }} onClick={() => handleRangeClick(range as RangeShortcutType)}>
+                  <ListItemText
+                    sx={{ my: 0 }}
+                    primary={label}
+                    primaryTypographyProps={{ fontSize: 12, fontWeight: 'medium' }}
+                  />
                 </ListItemButton>
               </ListItem>
             ))}
@@ -116,6 +120,7 @@ export default function PaperContentComponent() {
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <Stack spacing={4} alignItems="center">
           <DateRangePicker
+            calendars={2}
             onChange={(newValue) => setValue(newValue)}
             value={value}
             closeOnSelect={false}
@@ -157,11 +162,17 @@ export default function PaperContentComponent() {
                       {props.children}
 
                       <div className="flex items-center justify-end p-3 space-x-3">
-                        <Button variant="text" onClick={() => setOpen(false)}>
+                        <Button className="rounded-md" variant="text" size="small" onClick={() => setOpen(false)}>
                           닫기
                         </Button>
-                        <Button variant="contained" color="primary" onClick={updateValue}>
-                          업데이트
+                        <Button
+                          className="rounded-md"
+                          variant="contained"
+                          color="primary"
+                          size="small"
+                          onClick={updateValue}
+                        >
+                          <p>업데이트</p>
                         </Button>
                       </div>
                     </div>
