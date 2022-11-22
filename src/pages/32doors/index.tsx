@@ -6,6 +6,7 @@ import StandaloneToggleButton from '@/components/ToggleButton'
 import CustomizedTabs from '@/components/Tabs'
 import CustomizedDividers from '@/components/ToggleButton2'
 import PaperContentComponent from '@/components/DateRange'
+import Notification from '@/components/Notification'
 
 const Index = () => {
   return (
@@ -21,8 +22,9 @@ const Index = () => {
           <div className="flex items-center justify-center min-h-[9rem] bg-white rounded-md lg:h-full col-span-6 lg:col-span-1">
             <StandaloneToggleButton />
           </div>
-          <div className="flex items-center justify-center min-h-[9rem] bg-white rounded-md lg:h-full col-span-6 lg:col-span-1"></div>
-          <div className="flex items-center justify-center min-h-[9rem] bg-white rounded-md lg:h-full col-span-6 lg:col-span-1"></div>
+          <div className="flex items-center justify-center min-h-[9rem] bg-white rounded-md lg:h-full col-span-6 lg:col-span-1">
+            <Notification />
+          </div>
 
           <div className="flex items-center justify-center min-h-[9rem] bg-white rounded-md lg:h-full col-span-6 lg:col-span-3">
             <div className="px-4">
