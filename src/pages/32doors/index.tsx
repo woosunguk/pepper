@@ -7,6 +7,7 @@ import CustomizedTabs from '@/components/Tabs'
 import CustomizedDividers from '@/components/ToggleButton2'
 import PaperContentComponent from '@/components/DateRange'
 import Notification from '@/components/Notification'
+import DialogButton from '@/components/DialogButton'
 
 const Index = () => {
   return (
@@ -24,6 +25,9 @@ const Index = () => {
           </div>
           <div className="flex items-center justify-center min-h-[9rem] bg-white rounded-md lg:h-full col-span-6 lg:col-span-1">
             <Notification />
+          </div>
+          <div className="flex items-center justify-center min-h-[9rem] bg-white rounded-md lg:h-full col-span-6 lg:col-span-1">
+            <DialogButton />
           </div>
 
           <div className="flex items-center justify-center min-h-[9rem] bg-white rounded-md lg:h-full col-span-6 lg:col-span-3">
