@@ -12,14 +12,15 @@ import DialogButton from '@/components/DialogButton'
 const Index = () => {
   return (
     <>
-      <div className="flex flex-col max-w-4xl px-8 pt-8 mx-auto lg:px-0">
+      <div className="flex flex-col max-w-4xl px-8 py-8 mx-auto lg:px-0">
         <div className="mb-4">
           <p className="underline underline-offset-8">32 Doors</p>
         </div>
         <div className="grid w-full gap-3 mx-auto lg:grid-cols-6">
-          <div className="flex items-center justify-center min-h-[9rem] row-span-2  bg-yellow-300 rounded-md col-span-6 lg:col-span-3 lg:h-full">
+          <div className="flex items-center justify-center min-h-[9rem] row-span-1 bg-yellow-300 rounded-md col-span-6 lg:col-span-2 lg:h-full">
             <IssueSelect />
           </div>
+          <div className="flex items-center justify-center min-h-[9rem] bg-white rounded-md lg:h-full col-span-6 lg:col-span-1"></div>
           <div className="flex items-center justify-center min-h-[9rem] bg-white rounded-md lg:h-full col-span-6 lg:col-span-1">
             <StandaloneToggleButton />
           </div>
@@ -30,6 +31,7 @@ const Index = () => {
             <DialogButton />
           </div>
 
+          <div className="flex items-center justify-center min-h-[9rem] bg-white rounded-md lg:h-full col-span-6 lg:col-span-1"></div>
           <div className="flex items-center justify-center min-h-[9rem] bg-white rounded-md lg:h-full col-span-6 lg:col-span-3">
             <div className="px-4">
               <CustomizedTabs />
