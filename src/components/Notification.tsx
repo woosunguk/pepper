@@ -32,6 +32,7 @@ import ExpandMore from '@mui/icons-material/ExpandMore'
 import StarBorder from '@mui/icons-material/StarBorder'
 import { BellIcon } from '@heroicons/react/20/solid'
 import { EllipsisVerticalIcon } from '@heroicons/react/24/outline'
+import IconSwitch from './IconSwitch'
 
 const emails = ['username@gmail.com', 'user02@gmail.com']
 
@@ -243,6 +244,7 @@ export default function Notification2() {
       >
         <Paper sx={{ width: 320 }}>
           <div className="flex items-center justify-end">
+            <IconSwitch />
             <IconButton
               id="basic-button"
               aria-controls={open2 ? 'basic-menu' : undefined}

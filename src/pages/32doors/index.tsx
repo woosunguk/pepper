@@ -8,6 +8,7 @@ import CustomizedDividers from '@/components/ToggleButton2'
 import PaperContentComponent from '@/components/DateRange'
 import Notification from '@/components/Notification'
 import DialogButton from '@/components/DialogButton'
+import IconSwitch from '@/components/IconSwitch'
 
 const Index = () => {
   return (
@@ -20,7 +21,9 @@ const Index = () => {
           <div className="flex items-center justify-center min-h-[9rem] row-span-1 bg-yellow-300 rounded-md col-span-6 lg:col-span-2 lg:h-full">
             <IssueSelect />
           </div>
-          <div className="flex items-center justify-center min-h-[9rem] bg-white rounded-md lg:h-full col-span-6 lg:col-span-1"></div>
+          <div className="flex items-center justify-center min-h-[9rem] bg-white rounded-md lg:h-full col-span-6 lg:col-span-1">
+            <IconSwitch />
+          </div>
           <div className="flex items-center justify-center min-h-[9rem] bg-white rounded-md lg:h-full col-span-6 lg:col-span-1">
             <StandaloneToggleButton />
           </div>
