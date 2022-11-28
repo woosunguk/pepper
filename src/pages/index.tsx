@@ -19,7 +19,7 @@ const posts = [
     title: '32 Doors',
     href: '/32doors',
     category: { name: 'Components', href: '#' },
-    description: '32가지 컴포넌트 구경하기',
+    description: '32가지 MUI 커스텀 컴포넌트 구경하기',
     date: 'Mar 10, 2020',
     datetime: '2020-03-10',
     imageUrl:
