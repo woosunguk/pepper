@@ -215,6 +215,14 @@ const theme = createTheme({
             paddingRight: 8,
           },
         },
+        {
+          props: { size: 'extra-large' },
+          style: {
+            height: 48,
+            paddingLeft: 8,
+            paddingRight: 8,
+          },
+        },
       ],
     },
     MuiTextField: {

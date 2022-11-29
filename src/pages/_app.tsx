@@ -12,6 +12,7 @@ import { ManagedUIContext } from '@/components/ui/context'
 declare module '@mui/material/Button' {
   interface ButtonPropsSizeOverrides {
     'extra-small': true
+    'extra-large': true
   }
 }
 

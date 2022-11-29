@@ -67,6 +67,25 @@ const Index = () => {
               <p className="text-xs">엄지</p>
             </div>
           </div>
+          <div className="flex items-center justify-center min-h-[9rem] bg-white rounded-md lg:h-full col-span-6 lg:col-span-1  lg:row-span-2">
+            <div className="flex flex-col space-y-3">
+              <Button variant="contained" size="extra-small">
+                Extra small
+              </Button>
+              <Button variant="contained" size="small">
+                Small
+              </Button>
+              <Button variant="contained" size="medium">
+                Medium
+              </Button>
+              <Button variant="contained" size="large">
+                Large
+              </Button>
+              <Button variant="contained" size="extra-large">
+                Extra large
+              </Button>
+            </div>
+          </div>
           <div className="flex items-center justify-center min-h-[9rem] bg-white rounded-md lg:h-full col-span-6 lg:col-span-1"></div>
           <div className="flex items-center justify-center min-h-[9rem] bg-white rounded-md lg:h-full col-span-6 lg:col-span-1"></div>
           <div className="flex items-center justify-center min-h-[9rem] bg-white rounded-md lg:h-full col-span-6 lg:col-span-1"></div>
