@@ -1,6 +1,7 @@
+import { styled, useThemeProps } from '@mui/system'
 import React from 'react'
 
-import { styled, useThemeProps } from '../styles'
+// import { styled, useThemeProps } from '../styles'
 import { ButtonOwnerState } from './ButtonProps'
 
 export const ButtonRoot = styled('button', {
@@ -12,30 +13,12 @@ export const ButtonRoot = styled('button', {
 })
 
 const Button = React.forwardRef(function Button(inProps, ref) {
-  const props = useThemeProps<typeof inProps & { component?: React.ElementType }>({
+  const props = useThemeProps({
     props: inProps,
     name: 'SeoulButton',
   })
 
-  const {
-    children,
-    action,
-    component = 'button',
-    componentsProps = {},
-    color: colorProp = 'primary',
-    variant = 'solid',
-    size = 'md',
-    fullWidth = false,
-    startDecorator,
-    endDecorator,
-    loading = false,
-    loadingPosition = 'center',
-    loadingIndicator: loadingIndicatorProp,
-    disabled,
-    ...other
-  } = props
-
-  return <ButtonRoot>{children}</ButtonRoot>
+  return <ButtonRoot>Button</ButtonRoot>
 })
 
 export default Button
