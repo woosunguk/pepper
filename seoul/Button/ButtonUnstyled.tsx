@@ -14,6 +14,10 @@ const ButtonUnstyled = React.forwardRef(function ButtonUnstyled<
     focusableWhenDisabled,
   })
 
+  React.useEffect(() => {
+    console.debug(active, focusVisible)
+  }, [active, focusVisible])
+
   console.debug(active)
   console.debug(focusVisible)
   console.debug(setFocusVisible)

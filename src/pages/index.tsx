@@ -31,6 +31,21 @@ const posts = [
       imageUrl: 'https://lh3.googleusercontent.com/a/ALm5wu1UVJqBYA5Qw7jty_5Q0sZKr76Xa9yzliLz_O6DEw=s96-c',
     },
   },
+  {
+    title: 'Seoul UI',
+    href: '/buttons/use-imperative-handle',
+    category: { name: 'Button', href: '#' },
+    description: `라이브러리 없이 컴포넌트를 구현해보자! - 일단 Button`,
+    date: 'Mar 10, 2020',
+    datetime: '2020-03-10',
+    imageUrl: 'https://media.timeout.com/images/105240244/750/422/image.jpg',
+    readingTime: '4 min',
+    author: {
+      name: 'Sunguk Woo',
+      href: 'https://github.com/woosunguk/seoului',
+      imageUrl: 'https://lh3.googleusercontent.com/a/ALm5wu1UVJqBYA5Qw7jty_5Q0sZKr76Xa9yzliLz_O6DEw=s96-c',
+    },
+  },
 ]
 
 export default function Example() {
