@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { styled, useThemeProps } from '@mui/system'
 import React from 'react'
 

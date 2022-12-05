@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { deepmerge } from '@mui/utils'
 import extendTheme from './extendTheme'
 import type { CssVarsThemeOptions, ColorSystemOptions } from './extendTheme'
