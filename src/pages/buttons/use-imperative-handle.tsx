@@ -1,3 +1,5 @@
+import { ButtonUnstyled } from '@mui/base'
+import { Button } from '@mui/material'
 import React, { createRef, useEffect, forwardRef, ForwardedRef } from 'react'
 
 export interface ButtonUnstyledActions {
@@ -62,11 +64,19 @@ const ImperativeButton = forwardRef(
 const useImperativeHandle = () => {
   const inputRef1 = createRef<any>()
   const inputRef2 = createRef<any>()
+
   const action = createRef<ButtonUnstyledActions>()
+  const action2 = createRef<ButtonUnstyledActions>()
+
+  const handleClick = () => {
+    action2.current.focusVisible()
+  }
 
   return (
     <>
       <div className="flex flex-col px-40 py-32 space-y-24">
+        <Button onClick={handleClick}>TTT</Button>
+        <ButtonUnstyled action={action2}>asdf</ButtonUnstyled>
         <div>
           <div className="flex items-center space-x-4">
             <p className="text-xs cursor-pointer text-slate-800 w-80">
